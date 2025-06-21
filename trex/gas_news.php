@@ -1,0 +1,253 @@
+<?php
+$page_title = "Gas News";
+session_start();
+require_once 'config.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Get gas news
+try {
+    $stmt = $pdo->prepare("
+        SELECT * FROM news 
+        WHERE service_type IN ('gas', 'both') AND status = 'published'
+        AND (expires_at IS NULL OR expires_at > NOW())
+        ORDER BY priority DESC, published_at DESC 
+        LIMIT 20
+    ");
+    $stmt->execute();
+    $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $news = [];
+    error_log("Gas news error: " . $e->getMessage());
+}
+
+$additional_css = '
+    .news-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .news-header {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+        backdrop-filter: blur(20px);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 35px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .news-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, 
+            rgba(255, 107, 53, 0.1) 0%, 
+            rgba(247, 147, 30, 0.1) 50%,
+            rgba(255, 107, 53, 0.1) 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 10s ease infinite;
+        z-index: -1;
+    }
+
+    .news-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .news-grid {
+        display: grid;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .news-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .news-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .news-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .news-category {
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .category-maintenance {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .category-outage {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .category-update {
+        background: rgba(77, 171, 247, 0.2);
+        color: #4dabf7;
+        border: 1px solid rgba(77, 171, 247, 0.3);
+    }
+
+    .category-announcement {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .category-emergency {
+        background: rgba(239, 68, 68, 0.3);
+        color: #fecaca;
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        animation: pulse 2s infinite;
+    }
+
+    .news-date {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+    }
+
+    .news-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 15px;
+        font-family: "Poppins", sans-serif;
+        line-height: 1.3;
+    }
+
+    .news-content {
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .news-author {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.85rem;
+        font-style: italic;
+    }
+
+    .priority-high {
+        border-left: 4px solid #ef4444;
+    }
+
+    .priority-urgent {
+        border-left: 4px solid #dc2626;
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    .no-news {
+        text-align: center;
+        padding: 60px 30px;
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .no-news i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+        .news-container {
+            padding: 0 15px;
+        }
+        
+        .news-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+';
+
+$content = '
+<div class="news-container">
+    <div class="news-header">
+        <div class="news-icon">
+            <i class="fas fa-newspaper"></i>
+        </div>
+        <h1>Gas Service News</h1>
+        <p>Stay updated with the latest gas service announcements and updates</p>
+    </div>
+
+    <div class="news-grid">';
+
+if (!empty($news)) {
+    foreach ($news as $article) {
+        $categoryClass = 'category-' . $article['category'];
+        $priorityClass = $article['priority'] === 'high' ? 'priority-high' : ($article['priority'] === 'urgent' ? 'priority-urgent' : '');
+        
+        $content .= '
+        <div class="news-card ' . $priorityClass . '">
+            <div class="news-meta">
+                <div class="news-category ' . $categoryClass . '">' . ucfirst($article['category']) . '</div>
+                <div class="news-date">' . date('M d, Y', strtotime($article['published_at'])) . '</div>
+            </div>
+            
+            <h2 class="news-title">' . htmlspecialchars($article['title']) . '</h2>
+            
+            <div class="news-content">' . nl2br(htmlspecialchars($article['content'])) . '</div>
+            
+            ' . (!empty($article['author']) ? '<div class="news-author">By ' . htmlspecialchars($article['author']) . '</div>' : '') . '
+        </div>';
+    }
+} else {
+    $content .= '
+    <div class="no-news">
+        <i class="fas fa-newspaper"></i>
+        <h3>No News Available</h3>
+        <p>There are currently no gas service news or announcements. Check back later for updates.</p>
+    </div>';
+}
+
+$content .= '
+    </div>
+</div>';
+
+include 'layout.php';
+?>
