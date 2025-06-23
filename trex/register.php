@@ -23,20 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($name) || empty($last_name) || empty($id_card) || empty($reference) || 
         empty($email) || empty($phone) || empty($gas_counter) || empty($electric_counter) || 
         empty($counter_type) || empty($client_type) || empty($password) || empty($confirm_password)) {
-        $error = 'Please fill in all fields.';
+        $error = 'Veuillez remplir tous les champs.';
     } elseif ($password !== $confirm_password) {
-        $error = 'Passwords do not match.';
+        $error = 'Les mots de passe ne correspondent pas.';
     } elseif (strlen($password) < 6) {
-        $error = 'Password must be at least 6 characters long.';
+        $error = 'Le mot de passe doit contenir au moins 6 caractères.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Please enter a valid email address.';
+        $error = 'Veuillez entrer une adresse email valide.';
     } else {
         try {
             // Check if ID card number already exists
             $stmt = $pdo->prepare("SELECT id FROM users WHERE id_card_number = ?");
             $stmt->execute([$id_card]);
             if ($stmt->fetch()) {
-                $error = 'ID card number already registered.';
+                $error = 'Numéro de carte d\'identité déjà enregistré.';
             } else {
                 // Hash password and insert user
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -53,15 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $gas_counter, $electric_counter, $counter_type, $client_type, $hashed_password
                 ]);
                 
-                $success = 'Account created successfully! Redirecting to login...';
+                $success = 'Compte créé avec succès ! Redirection vers la connexion...';
                 // Clear form data after successful registration
                 $_POST = [];
             }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $error = 'ID card number already exists.';
+                $error = 'Le numéro de carte d\'identité existe déjà.';
             } else {
-                $error = 'Database error occurred. Please try again.';
+                $error = 'Erreur de base de données. Veuillez réessayer.';
             }
         }
     }
@@ -75,11 +75,11 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Create Account</title>
+    <title>VoltGaz - Créer un compte</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -254,7 +254,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .logo p {
-            color: rgba(255, 255, 255, 0.8);
+            color: #1a1a1a;
             font-size: 1rem;
             font-weight: 500;
         }
@@ -264,7 +264,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .section-title {
-            color: white;
+            color: #1a1a1a;
             font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 20px;
@@ -293,7 +293,7 @@ if (isset($_SESSION['user_id'])) {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: white;
+            color: #1a1a1a;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -308,7 +308,7 @@ if (isset($_SESSION['user_id'])) {
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: #404040;
             font-size: 1rem;
             z-index: 2;
         }
@@ -322,7 +322,7 @@ if (isset($_SESSION['user_id'])) {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            color: white;
+            color: #1a1a1a;
             font-weight: 500;
         }
 
@@ -331,7 +331,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(26, 26, 26, 0.5);
         }
 
         input:focus, select:focus {
@@ -400,12 +400,12 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .switch-form p {
-            color: rgba(255, 255, 255, 0.8);
+            color: #2d2d2d;
             margin-bottom: 10px;
         }
 
         .switch-form a {
-            color: white;
+            color: #1a1a1a;
             text-decoration: none;
             font-weight: 700;
             transition: all 0.3s ease;
@@ -426,7 +426,7 @@ if (isset($_SESSION['user_id'])) {
         .error {
             background: rgba(239, 68, 68, 0.1);
             backdrop-filter: blur(10px);
-            color: #fecaca;
+            color: #dc2626;
             padding: 15px 20px;
             border-radius: 12px;
             margin-bottom: 25px;
@@ -439,7 +439,7 @@ if (isset($_SESSION['user_id'])) {
         .success {
             background: rgba(34, 197, 94, 0.1);
             backdrop-filter: blur(10px);
-            color: #bbf7d0;
+            color: #16a34a;
             padding: 15px 20px;
             border-radius: 12px;
             margin-bottom: 25px;
@@ -561,7 +561,7 @@ if (isset($_SESSION['user_id'])) {
                 <div class="logo-pulse"></div>
             </div>
             <h1><span class="volt">Volt</span><span class="gaz">Gaz</span></h1>
-            <p>Create Your Account</p>
+            <p>Créez votre compte</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -582,46 +582,46 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="fas fa-user"></i>
-                    Personal Information
+                    Informations personnelles
                 </h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="name">First Name</label>
+                        <label for="name">Prénom</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user input-icon"></i>
                             <input type="text" id="name" name="name" required 
-                                   placeholder="Enter your first name"
+                                   placeholder="Entrez votre prénom"
                                    value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name">Last Name</label>
+                        <label for="last_name">Nom de famille</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user input-icon"></i>
                             <input type="text" id="last_name" name="last_name" required 
-                                   placeholder="Enter your last name"
+                                   placeholder="Entrez votre nom de famille"
                                    value="<?php echo htmlspecialchars($_POST['last_name'] ?? ''); ?>">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="id_card_number">ID Card Number</label>
+                    <label for="id_card_number">Numéro de carte d'identité</label>
                     <div class="input-wrapper">
                         <i class="fas fa-id-card input-icon"></i>
                         <input type="text" id="id_card_number" name="id_card_number" required 
-                               placeholder="Enter your ID card number"
+                               placeholder="Entrez votre numéro de carte d'identité"
                                value="<?php echo htmlspecialchars($_POST['id_card_number'] ?? ''); ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="reference">Reference Number</label>
+                    <label for="reference">Numéro de référence</label>
                     <div class="input-wrapper">
                         <i class="fas fa-hashtag input-icon"></i>
                         <input type="text" id="reference" name="reference" required 
-                               placeholder="Enter your reference number"
+                               placeholder="Entrez votre numéro de référence"
                                value="<?php echo htmlspecialchars($_POST['reference'] ?? ''); ?>">
                     </div>
                 </div>
@@ -630,25 +630,25 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="fas fa-address-book"></i>
-                    Contact Information
+                    Informations de contact
                 </h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="email">Email Address</label>
+                        <label for="email">Adresse email</label>
                         <div class="input-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
                             <input type="email" id="email" name="email" required 
-                                   placeholder="Enter your email"
+                                   placeholder="Entrez votre email"
                                    value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
+                        <label for="phone">Numéro de téléphone</label>
                         <div class="input-wrapper">
                             <i class="fas fa-phone input-icon"></i>
                             <input type="tel" id="phone" name="phone" required 
-                                   placeholder="Enter your phone number"
+                                   placeholder="Entrez votre numéro de téléphone"
                                    value="<?php echo htmlspecialchars($_POST['phone'] ?? ''); ?>">
                         </div>
                     </div>
@@ -658,25 +658,25 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="fas fa-tachometer-alt"></i>
-                    Counter Information
+                    Informations des compteurs
                 </h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="gas_counter_number">Gas Counter Number</label>
+                        <label for="gas_counter_number">Numéro compteur gaz</label>
                         <div class="input-wrapper">
                             <i class="fas fa-fire input-icon"></i>
                             <input type="text" id="gas_counter_number" name="gas_counter_number" required 
-                                   placeholder="Enter gas counter number"
+                                   placeholder="Entrez le numéro du compteur gaz"
                                    value="<?php echo htmlspecialchars($_POST['gas_counter_number'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="electric_counter_number">Electric Counter Number</label>
+                        <label for="electric_counter_number">Numéro compteur électrique</label>
                         <div class="input-wrapper">
                             <i class="fas fa-bolt input-icon"></i>
                             <input type="text" id="electric_counter_number" name="electric_counter_number" required 
-                                   placeholder="Enter electric counter number"
+                                   placeholder="Entrez le numéro du compteur électrique"
                                    value="<?php echo htmlspecialchars($_POST['electric_counter_number'] ?? ''); ?>">
                         </div>
                     </div>
@@ -684,25 +684,25 @@ if (isset($_SESSION['user_id'])) {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="electric_counter_type">Electric Counter Type</label>
+                        <label for="electric_counter_type">Type de compteur électrique</label>
                         <div class="input-wrapper">
                             <i class="fas fa-cog input-icon"></i>
                             <select id="electric_counter_type" name="electric_counter_type" required>
-                                <option value="">Select Counter Type</option>
-                                <option value="classic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'classic') ? 'selected' : ''; ?>>Classic</option>
-                                <option value="electronic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'electronic') ? 'selected' : ''; ?>>Electronic</option>
+                                <option value="">Sélectionner le type de compteur</option>
+                                <option value="classic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'classic') ? 'selected' : ''; ?>>Classique</option>
+                                <option value="electronic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'electronic') ? 'selected' : ''; ?>>Électronique</option>
                                 <option value="linky" <?php echo (($_POST['electric_counter_type'] ?? '') === 'linky') ? 'selected' : ''; ?>>Linky</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="client_type">Client Type</label>
+                        <label for="client_type">Type de client</label>
                         <div class="input-wrapper">
                             <i class="fas fa-building input-icon"></i>
                             <select id="client_type" name="client_type" required>
-                                <option value="">Select Client Type</option>
-                                <option value="residentiel" <?php echo (($_POST['client_type'] ?? '') === 'residentiel') ? 'selected' : ''; ?>>Residential</option>
-                                <option value="industriel" <?php echo (($_POST['client_type'] ?? '') === 'industriel') ? 'selected' : ''; ?>>Industrial</option>
+                                <option value="">Sélectionner le type de client</option>
+                                <option value="residentiel" <?php echo (($_POST['client_type'] ?? '') === 'residentiel') ? 'selected' : ''; ?>>Résidentiel</option>
+                                <option value="industriel" <?php echo (($_POST['client_type'] ?? '') === 'industriel') ? 'selected' : ''; ?>>Industriel</option>
                             </select>
                         </div>
                     </div>
@@ -712,24 +712,24 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="fas fa-lock"></i>
-                    Security
+                    Sécurité
                 </h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="password">Password</label>
+                        <label for="password">Mot de passe</label>
                         <div class="input-wrapper">
                             <i class="fas fa-lock input-icon"></i>
                             <input type="password" id="password" name="password" required 
-                                   placeholder="Create a password">
+                                   placeholder="Créez un mot de passe">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password">Confirm Password</label>
+                        <label for="confirm_password">Confirmer le mot de passe</label>
                         <div class="input-wrapper">
                             <i class="fas fa-lock input-icon"></i>
                             <input type="password" id="confirm_password" name="confirm_password" required 
-                                   placeholder="Confirm your password">
+                                   placeholder="Confirmez votre mot de passe">
                         </div>
                     </div>
                 </div>
@@ -737,15 +737,15 @@ if (isset($_SESSION['user_id'])) {
 
             <button type="submit" class="btn" id="registerBtn">
                 <i class="fas fa-user-plus"></i>
-                Create VoltGaz Account
+                Créer un compte VoltGaz
             </button>
         </form>
 
         <div class="switch-form">
-            <p>Already have an account?</p>
+            <p>Vous avez déjà un compte ?</p>
             <a href="login.php">
                 <i class="fas fa-sign-in-alt"></i>
-                Login Here
+                Se connecter ici
             </a>
         </div>
     </div>
@@ -762,7 +762,7 @@ if (isset($_SESSION['user_id'])) {
         document.getElementById('registerForm').addEventListener('submit', function() {
             const btn = document.getElementById('registerBtn');
             btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
         });
 
         // Password confirmation validation

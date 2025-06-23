@@ -11,27 +11,38 @@ if (isset($_GET['switch_service']) && in_array($_GET['switch_service'], ['gas', 
 // Define menu items for each service type
 $menu_items = [
     'gas' => [
-        'bill' => ['url' => 'gas_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Gas Bill'],
-        'news' => ['url' => 'gas_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Gas News'],
-        'information' => ['url' => 'gas_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Gas Information'],
-        'bill_payment' => ['url' => 'gas_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Gas Payment'],
-        'contact' => ['url' => 'gas_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Gas Contact'],
-        'history' => ['url' => 'gas_history.php', 'icon' => 'fas fa-history', 'title' => 'Gas History'],
-        'reclamation' => ['url' => 'gas_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Gas Reclamation']
+        'bill' => ['url' => 'gas_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Facture gaz'],
+        'news' => ['url' => 'gas_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Actualités gaz'],
+        'information' => ['url' => 'gas_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Informations gaz'],
+        'bill_payment' => ['url' => 'gas_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Paiement gaz'],
+        'contact' => ['url' => 'gas_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Contact gaz'],
+        'history' => ['url' => 'gas_history.php', 'icon' => 'fas fa-history', 'title' => 'Historique gaz'],
+        'reclamation' => ['url' => 'gas_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation gaz']
     ],
     'electricity' => [
-        'bill' => ['url' => 'electricity_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Electricity Bill'],
-        'news' => ['url' => 'electricity_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Electricity News'],
-        'information' => ['url' => 'electricity_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Electricity Information'],
-        'bill_payment' => ['url' => 'electricity_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Electricity Payment'],
-        'contact' => ['url' => 'electricity_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Electricity Contact'],
-        'history' => ['url' => 'electricity_history.php', 'icon' => 'fas fa-history', 'title' => 'Electricity History'],
-        'reclamation' => ['url' => 'electricity_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Electricity Reclamation']
+        'bill' => ['url' => 'electricity_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Facture électricité'],
+        'news' => ['url' => 'electricity_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Actualités électricité'],
+        'information' => ['url' => 'electricity_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Informations électricité'],
+        'bill_payment' => ['url' => 'electricity_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Paiement électricité'],
+        'contact' => ['url' => 'electricity_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Contact électricité'],
+        'history' => ['url' => 'electricity_history.php', 'icon' => 'fas fa-history', 'title' => 'Historique électricité'],
+        'reclamation' => ['url' => 'electricity_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation électricité']
     ]
 ];
 
 $current_menu = $menu_items[$service_type];
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// French translations for menu items
+$menu_translations = [
+    'bill' => 'Facture',
+    'news' => 'Actualités',
+    'information' => 'Informations',
+    'bill_payment' => 'Paiement',
+    'contact' => 'Contact',
+    'history' => 'Historique',
+    'reclamation' => 'Réclamation'
+];
 ?>
 
 <div class="sidebar" id="sidebar">
@@ -60,7 +71,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <i class="fas fa-fire"></i>
                     <div class="icon-glow"></div>
                 </div>
-                <span>Gas</span>
+                <span>Gaz</span>
                 <div class="switch-ripple"></div>
             </button>
             <button class="switch-btn <?php echo ($service_type == 'electricity') ? 'active' : ''; ?>" 
@@ -69,7 +80,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <i class="fas fa-bolt"></i>
                     <div class="icon-glow"></div>
                 </div>
-                <span>Electricity</span>
+                <span>Électricité</span>
                 <div class="switch-ripple"></div>
             </button>
         </div>
@@ -86,7 +97,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <i class="<?php echo $item['icon']; ?>"></i>
                             <div class="nav-icon-bg"></div>
                         </div>
-                        <span class="nav-text"><?php echo ucfirst(str_replace('_', ' ', $key)); ?></span>
+                        <span class="nav-text"><?php echo $menu_translations[$key] ?? ucfirst(str_replace('_', ' ', $key)); ?></span>
                         <div class="nav-hover-effect"></div>
                     </a>
                 </li>
@@ -101,7 +112,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <i class="fas fa-sign-out-alt"></i>
                 <div class="logout-glow"></div>
             </div>
-            <span>Logout</span>
+            <span>Déconnexion</span>
             <div class="logout-ripple"></div>
         </a>
     </div>

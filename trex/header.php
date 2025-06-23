@@ -14,11 +14,11 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+    die("Connexion échouée: " . $e->getMessage());
 }
 
 // Get user information
-$user_name = 'Guest';
+$user_name = 'Invité';
 $user_email = '';
 
 if (isset($_SESSION['user_id'])) {
@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id'])) {
             $user_email = $user['email'];
         }
     } catch(PDOException $e) {
-        error_log("Database error: " . $e->getMessage());
+        error_log("Erreur de base de données: " . $e->getMessage());
     }
 }
 
@@ -62,10 +62,10 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
                     <div class="service-icon-glow" style="background: <?php echo $service_color; ?>"></div>
                 </div>
                 <div class="service-info">
-                    <span class="service-name"><?php echo ucfirst($service_type); ?> Service</span>
+                    <span class="service-name">Service <?php echo ucfirst($service_type == 'gas' ? 'Gaz' : 'Électricité'); ?></span>
                     <div class="service-status">
                         <div class="status-dot"></div>
-                        <span>Active</span>
+                        <span>Actif</span>
                     </div>
                 </div>
             </div>
@@ -77,21 +77,21 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
                 <span class="title-text">
                     <?php 
                     $page_titles = [
-                        'dashboard.php' => 'Dashboard',
-                        'gas_bill.php' => 'Gas Bill',
-                        'electricity_bill.php' => 'Electricity Bill',
-                        'gas_news.php' => 'Gas News',
-                        'electricity_news.php' => 'Electricity News',
-                        'gas_information.php' => 'Gas Information',
-                        'electricity_information.php' => 'Electricity Information',
-                        'gas_payment.php' => 'Gas Payment',
-                        'electricity_payment.php' => 'Electricity Payment',
-                        'gas_contact.php' => 'Gas Contact',
-                        'electricity_contact.php' => 'Electricity Contact',
-                        'gas_history.php' => 'Gas History',
-                        'electricity_history.php' => 'Electricity History',
-                        'gas_reclamation.php' => 'Gas Reclamation',
-                        'electricity_reclamation.php' => 'Electricity Reclamation'
+                        'dashboard.php' => 'Tableau de bord',
+                        'gas_bill.php' => 'Facture de gaz',
+                        'electricity_bill.php' => 'Facture d\'électricité',
+                        'gas_news.php' => 'Actualités gaz',
+                        'electricity_news.php' => 'Actualités électricité',
+                        'gas_information.php' => 'Informations gaz',
+                        'electricity_information.php' => 'Informations électricité',
+                        'gas_payment.php' => 'Paiement gaz',
+                        'electricity_payment.php' => 'Paiement électricité',
+                        'gas_contact.php' => 'Contact gaz',
+                        'electricity_contact.php' => 'Contact électricité',
+                        'gas_history.php' => 'Historique gaz',
+                        'electricity_history.php' => 'Historique électricité',
+                        'gas_reclamation.php' => 'Réclamation gaz',
+                        'electricity_reclamation.php' => 'Réclamation électricité'
                     ];
                     
                     $current_page = basename($_SERVER['PHP_SELF']);
@@ -106,53 +106,7 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
         <div class="header-right">
             <div class="user-menu">
                 <!-- Notifications -->
-                <div class="notification-wrapper">
-                    <div class="notification-icon" onclick="toggleNotifications()">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge pulse">3</span>
-                        <div class="notification-glow"></div>
-                    </div>
-                    
-                    <!-- Notification Dropdown -->
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="notification-header">
-                            <h4>Notifications</h4>
-                            <span class="notification-count">3 new</span>
-                        </div>
-                        <div class="notification-list">
-                            <div class="notification-item">
-                                <div class="notification-icon-small">
-                                    <i class="fas fa-file-invoice-dollar"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <p>New bill available</p>
-                                    <span class="notification-time">2 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="notification-item">
-                                <div class="notification-icon-small">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <p>Service maintenance scheduled</p>
-                                    <span class="notification-time">1 day ago</span>
-                                </div>
-                            </div>
-                            <div class="notification-item">
-                                <div class="notification-icon-small">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <p>Payment confirmed</p>
-                                    <span class="notification-time">3 days ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="notification-footer">
-                            <a href="#" class="view-all-btn">View All</a>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <!-- User dropdown -->
                 <div class="user-dropdown">
@@ -181,20 +135,20 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
                         <div class="dropdown-divider"></div>
                         <a href="profile.php" class="dropdown-item">
                             <i class="fas fa-user-circle"></i>
-                            <span>Profile</span>
+                            <span>Profil</span>
                         </a>
                         <a href="settings.php" class="dropdown-item">
                             <i class="fas fa-cog"></i>
-                            <span>Settings</span>
+                            <span>Paramètres</span>
                         </a>
                         <a href="help.php" class="dropdown-item">
                             <i class="fas fa-question-circle"></i>
-                            <span>Help & Support</span>
+                            <span>Aide et support</span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="logout.php" class="dropdown-item logout">
                             <i class="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
+                            <span>Déconnexion</span>
                         </a>
                     </div>
                 </div>

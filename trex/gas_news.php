@@ -1,5 +1,5 @@
 <?php
-$page_title = "Gas News";
+$page_title = "Actualités gaz";
 session_start();
 require_once 'config.php';
 
@@ -21,7 +21,7 @@ try {
     $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $news = [];
-    error_log("Gas news error: " . $e->getMessage());
+    error_log("Erreur actualités gaz: " . $e->getMessage());
 }
 
 $additional_css = '
@@ -35,7 +35,7 @@ $additional_css = '
     .news-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -60,6 +60,18 @@ $additional_css = '
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
+    }
+
+    .news-header h1 {
+        color: #1a1a1a;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .news-header p {
+        color: #2d2d2d;
+        font-size: 1.2rem;
     }
 
     .news-icon {
@@ -144,27 +156,27 @@ $additional_css = '
     }
 
     .news-date {
-        color: rgba(255, 255, 255, 0.7);
+        color: #404040;
         font-size: 0.9rem;
     }
 
     .news-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         margin-bottom: 15px;
         font-family: "Poppins", sans-serif;
         line-height: 1.3;
     }
 
     .news-content {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         line-height: 1.6;
         margin-bottom: 20px;
     }
 
     .news-author {
-        color: rgba(255, 255, 255, 0.6);
+        color: #404040;
         font-size: 0.85rem;
         font-style: italic;
     }
@@ -181,7 +193,7 @@ $additional_css = '
     .no-news {
         text-align: center;
         padding: 60px 30px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -211,8 +223,8 @@ $content = '
         <div class="news-icon">
             <i class="fas fa-newspaper"></i>
         </div>
-        <h1>Gas Service News</h1>
-        <p>Stay updated with the latest gas service announcements and updates</p>
+        <h1>Actualités du service gaz</h1>
+        <p>Restez informé des dernières annonces et mises à jour du service gaz</p>
     </div>
 
     <div class="news-grid">';
@@ -222,26 +234,37 @@ if (!empty($news)) {
         $categoryClass = 'category-' . $article['category'];
         $priorityClass = $article['priority'] === 'high' ? 'priority-high' : ($article['priority'] === 'urgent' ? 'priority-urgent' : '');
         
+        // Translate categories
+        $categoryTranslations = [
+            'maintenance' => 'Maintenance',
+            'outage' => 'Panne',
+            'update' => 'Mise à jour',
+            'announcement' => 'Annonce',
+            'emergency' => 'Urgence'
+        ];
+        
+        $categoryText = $categoryTranslations[$article['category']] ?? ucfirst($article['category']);
+        
         $content .= '
         <div class="news-card ' . $priorityClass . '">
             <div class="news-meta">
-                <div class="news-category ' . $categoryClass . '">' . ucfirst($article['category']) . '</div>
-                <div class="news-date">' . date('M d, Y', strtotime($article['published_at'])) . '</div>
+                <div class="news-category ' . $categoryClass . '">' . $categoryText . '</div>
+                <div class="news-date">' . date('d M Y', strtotime($article['published_at'])) . '</div>
             </div>
             
             <h2 class="news-title">' . htmlspecialchars($article['title']) . '</h2>
             
             <div class="news-content">' . nl2br(htmlspecialchars($article['content'])) . '</div>
             
-            ' . (!empty($article['author']) ? '<div class="news-author">By ' . htmlspecialchars($article['author']) . '</div>' : '') . '
+            ' . (!empty($article['author']) ? '<div class="news-author">Par ' . htmlspecialchars($article['author']) . '</div>' : '') . '
         </div>';
     }
 } else {
     $content .= '
     <div class="no-news">
         <i class="fas fa-newspaper"></i>
-        <h3>No News Available</h3>
-        <p>There are currently no gas service news or announcements. Check back later for updates.</p>
+        <h3>Aucune actualité disponible</h3>
+        <p>Il n\'y a actuellement aucune actualité ou annonce du service gaz. Revenez plus tard pour les mises à jour.</p>
     </div>';
 }
 

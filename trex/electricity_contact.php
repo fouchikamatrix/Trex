@@ -1,5 +1,5 @@
 <?php
-$page_title = "Electricity Contact";
+$page_title = "Contact électricité";
 session_start();
 require_once 'config.php';
 
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get user data
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 $user_email = $user_data['email'] ?? '';
 
 $success_message = '';
@@ -25,11 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validation
     if (empty($subject) || empty($message)) {
-        $error_message = 'Please fill in all required fields.';
+        $error_message = 'Veuillez remplir tous les champs obligatoires.';
     } elseif (strlen($subject) < 5) {
-        $error_message = 'Subject must be at least 5 characters long.';
+        $error_message = 'Le sujet doit contenir au moins 5 caractères.';
     } elseif (strlen($message) < 10) {
-        $error_message = 'Message must be at least 10 characters long.';
+        $error_message = 'Le message doit contenir au moins 10 caractères.';
     } else {
         try {
             // Store in database
@@ -49,15 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Email details
             $to = "saskijackson@gmail.com";
             $email_subject = "VoltGaz Contact - " . ucfirst($category) . ": " . $subject;
-            $email_body = "New contact message from VoltGaz application\n\n";
-            $email_body .= "User: $user_name\n";
+            $email_body = "Nouveau message de contact depuis l'application VoltGaz\n\n";
+            $email_body .= "Utilisateur: $user_name\n";
             $email_body .= "Email: $user_email\n";
-            $email_body .= "Priority: " . ucfirst($priority) . "\n";
-            $email_body .= "Category: " . ucfirst($category) . "\n\n";
-            $email_body .= "Subject: $subject\n\n";
+            $email_body .= "Priorité: " . ucfirst($priority) . "\n";
+            $email_body .= "Catégorie: " . ucfirst($category) . "\n\n";
+            $email_body .= "Sujet: $subject\n\n";
             $email_body .= "Message:\n$message\n\n";
             $email_body .= "---\n";
-            $email_body .= "Sent from VoltGaz Contact System";
+            $email_body .= "Envoyé depuis le système de contact VoltGaz";
             
             $headers = "From: noreply@voltgaz.com\r\n";
             $headers .= "Reply-To: $user_email\r\n";
@@ -65,14 +65,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Send email
             if (mail($to, $email_subject, $email_body, $headers)) {
-                $success_message = 'Thank you! Your message has been sent successfully. We will get back to you within 24 hours.';
+                $success_message = 'Merci ! Votre message a été envoyé avec succès. Nous vous répondrons dans les 24 heures.';
                 // Clear form data
                 $_POST = [];
             } else {
-                $error_message = 'Message saved but email notification failed. We will still review your message.';
+                $error_message = 'Message sauvegardé mais la notification par email a échoué. Nous examinerons quand même votre message.';
             }
         } catch (PDOException $e) {
-            $error_message = 'Sorry, there was an error processing your request. Please try again.';
+            $error_message = 'Désolé, une erreur s\'est produite lors du traitement de votre demande. Veuillez réessayer.';
             error_log("Contact form error: " . $e->getMessage());
         }
     }
@@ -94,7 +94,7 @@ $additional_css = '
     .contact-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -125,16 +125,13 @@ $additional_css = '
         font-size: 2.5rem;
         margin-bottom: 15px;
         font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
     .contact-header p {
         font-size: 1.2rem;
-        opacity: 0.9;
+        color: #2d2d2d;
         font-weight: 500;
     }
 
@@ -196,7 +193,7 @@ $additional_css = '
     }
 
     .user-info h3 {
-        color: white;
+        color: #1a1a1a;
         font-size: 1.1rem;
         font-weight: 700;
         margin-bottom: 10px;
@@ -204,7 +201,7 @@ $additional_css = '
     }
 
     .user-info p {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         margin: 5px 0;
         font-weight: 500;
     }
@@ -225,7 +222,7 @@ $additional_css = '
         display: block;
         margin-bottom: 10px;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-size: 0.95rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -252,14 +249,14 @@ $additional_css = '
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        color: white;
+        color: #1a1a1a;
         font-weight: 500;
         font-family: "Inter", sans-serif;
     }
 
     .form-group input::placeholder,
     .form-group textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(26, 26, 26, 0.5);
     }
 
     .form-group input:focus,
@@ -313,14 +310,14 @@ $additional_css = '
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         font-size: 0.9rem;
     }
 
     .priority-option input[type="radio"]:checked + .priority-label {
         background: rgba(102, 126, 234, 0.2);
         border-color: rgba(102, 126, 234, 0.6);
-        color: white;
+        color: #1a1a1a;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
     }
@@ -416,13 +413,13 @@ $additional_css = '
 
     .alert.success {
         background: rgba(34, 197, 94, 0.1);
-        color: #bbf7d0;
+        color: #16a34a;
         border-color: rgba(34, 197, 94, 0.3);
     }
 
     .alert.error {
         background: rgba(239, 68, 68, 0.1);
-        color: #fecaca;
+        color: #dc2626;
         border-color: rgba(239, 68, 68, 0.3);
     }
 
@@ -490,7 +487,7 @@ $additional_css = '
     }
 
     .info-card h3 {
-        color: white;
+        color: #1a1a1a;
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 15px;
@@ -498,7 +495,7 @@ $additional_css = '
     }
 
     .info-card p {
-        color: rgba(255, 255, 255, 0.8);
+        color: #2d2d2d;
         line-height: 1.6;
         font-weight: 500;
     }
@@ -598,8 +595,8 @@ $content = '
         <div class="contact-icon">
             <i class="fas fa-headset"></i>
         </div>
-        <h1>Electricity Support</h1>
-        <p>Get in touch with our electricity support team</p>
+        <h1>Support électricité</h1>
+        <p>Contactez notre équipe de support électricité</p>
     </div>
 
     ' . (!empty($success_message) ? '<div class="alert success"><i class="fas fa-check-circle"></i>' . htmlspecialchars($success_message) . '</div>' : '') . '
@@ -607,9 +604,9 @@ $content = '
 
     <div class="contact-form-card">
         <div class="user-info">
-            <h3><i class="fas fa-user"></i> Sending as:</h3>
-            <p><strong>Name:</strong> ' . htmlspecialchars($user_name) . '</p>
-            <p><strong>Email:</strong> ' . htmlspecialchars($user_email) . '</p>
+            <h3><i class="fas fa-user"></i> Envoi en tant que :</h3>
+            <p><strong>Nom :</strong> ' . htmlspecialchars($user_name) . '</p>
+            <p><strong>Email :</strong> ' . htmlspecialchars($user_email) . '</p>
         </div>
 
         <form method="POST" action="" id="contactForm">
@@ -617,31 +614,31 @@ $content = '
                 <div class="form-group">
                     <label for="category">
                         <i class="fas fa-tags"></i>
-                        Category
+                        Catégorie
                     </label>
                     <select id="category" name="category" required>
-                        <option value="">Select Category</option>
-                        <option value="billing" ' . (($_POST['category'] ?? '') === 'billing' ? 'selected' : '') . '>Billing Issues</option>
-                        <option value="outage" ' . (($_POST['category'] ?? '') === 'outage' ? 'selected' : '') . '>Power Outage</option>
-                        <option value="meter" ' . (($_POST['category'] ?? '') === 'meter' ? 'selected' : '') . '>Meter Reading</option>
-                        <option value="connection" ' . (($_POST['category'] ?? '') === 'connection' ? 'selected' : '') . '>New Connection</option>
-                        <option value="technical" ' . (($_POST['category'] ?? '') === 'technical' ? 'selected' : '') . '>Technical Support</option>
-                        <option value="complaint" ' . (($_POST['category'] ?? '') === 'complaint' ? 'selected' : '') . '>Complaint</option>
-                        <option value="general" ' . (($_POST['category'] ?? '') === 'general' ? 'selected' : '') . '>General Inquiry</option>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="billing" ' . (($_POST['category'] ?? '') === 'billing' ? 'selected' : '') . '>Problèmes de facturation</option>
+                        <option value="outage" ' . (($_POST['category'] ?? '') === 'outage' ? 'selected' : '') . '>Panne de courant</option>
+                        <option value="meter" ' . (($_POST['category'] ?? '') === 'meter' ? 'selected' : '') . '>Lecture de compteur</option>
+                        <option value="connection" ' . (($_POST['category'] ?? '') === 'connection' ? 'selected' : '') . '>Nouvelle connexion</option>
+                        <option value="technical" ' . (($_POST['category'] ?? '') === 'technical' ? 'selected' : '') . '>Support technique</option>
+                        <option value="complaint" ' . (($_POST['category'] ?? '') === 'complaint' ? 'selected' : '') . '>Réclamation</option>
+                        <option value="general" ' . (($_POST['category'] ?? '') === 'general' ? 'selected' : '') . '>Demande générale</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>
                         <i class="fas fa-exclamation-circle"></i>
-                        Priority Level
+                        Niveau de priorité
                     </label>
                     <div class="priority-selector">
                         <div class="priority-option">
                             <input type="radio" id="low" name="priority" value="low" ' . (($_POST['priority'] ?? 'normal') === 'low' ? 'checked' : '') . '>
                             <label for="low" class="priority-label low">
                                 <i class="fas fa-clock"></i><br>
-                                Low
+                                Faible
                             </label>
                         </div>
                         <div class="priority-option">
@@ -665,10 +662,10 @@ $content = '
             <div class="form-group">
                 <label for="subject">
                     <i class="fas fa-envelope"></i>
-                    Subject
+                    Sujet
                 </label>
                 <input type="text" id="subject" name="subject" required 
-                       placeholder="Brief description of your issue"
+                       placeholder="Brève description de votre problème"
                        value="' . htmlspecialchars($_POST['subject'] ?? '') . '"
                        minlength="5" maxlength="100">
             </div>
@@ -679,16 +676,16 @@ $content = '
                     Message
                 </label>
                 <textarea id="message" name="message" required 
-                          placeholder="Please provide detailed information about your electricity-related inquiry or issue..."
+                          placeholder="Veuillez fournir des informations détaillées sur votre demande ou problème lié à l\'électricité..."
                           minlength="10" maxlength="1000">' . htmlspecialchars($_POST['message'] ?? '') . '</textarea>
-                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; margin-top: 5px; display: block;">
-                    <span id="charCount">0</span>/1000 characters
+                <small style="color: #404040; font-size: 0.85rem; margin-top: 5px; display: block;">
+                    <span id="charCount">0</span>/1000 caractères
                 </small>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">
                 <i class="fas fa-paper-plane"></i>
-                Send Message
+                Envoyer le message
             </button>
         </form>
     </div>
@@ -698,24 +695,24 @@ $content = '
             <div class="info-card-icon">
                 <i class="fas fa-phone"></i>
             </div>
-            <h3>Emergency Hotline</h3>
-            <p>24/7 Emergency Support<br><strong>+1 (555) 123-4567</strong></p>
+            <h3>Ligne d\'urgence</h3>
+            <p>Support d\'urgence 24/7<br><strong>+1 (555) 123-4567</strong></p>
         </div>
 
         <div class="info-card">
             <div class="info-card-icon">
                 <i class="fas fa-envelope"></i>
             </div>
-            <h3>Email Support</h3>
-            <p>General Inquiries<br><strong>support@voltgaz.com</strong></p>
+            <h3>Support par email</h3>
+            <p>Demandes générales<br><strong>support@voltgaz.com</strong></p>
         </div>
 
         <div class="info-card">
             <div class="info-card-icon">
                 <i class="fas fa-clock"></i>
             </div>
-            <h3>Response Time</h3>
-            <p>We typically respond within<br><strong>24 hours</strong></p>
+            <h3>Temps de réponse</h3>
+            <p>Nous répondons généralement dans les<br><strong>24 heures</strong></p>
         </div>
     </div>
 </div>';
@@ -728,9 +725,9 @@ document.getElementById("message").addEventListener("input", function() {
     document.getElementById("charCount").textContent = charCount;
     
     if (charCount > 900) {
-        document.getElementById("charCount").style.color = "#fecaca";
+        document.getElementById("charCount").style.color = "#dc2626";
     } else {
-        document.getElementById("charCount").style.color = "rgba(255, 255, 255, 0.6)";
+        document.getElementById("charCount").style.color = "#404040";
     }
 });
 
@@ -738,7 +735,7 @@ document.getElementById("message").addEventListener("input", function() {
 document.getElementById("contactForm").addEventListener("submit", function() {
     const btn = document.getElementById("submitBtn");
     btn.classList.add("loading");
-    btn.innerHTML = \'<i class="fas fa-spinner fa-spin"></i> Sending...\';
+    btn.innerHTML = \'<i class="fas fa-spinner fa-spin"></i> Envoi en cours...\';
     btn.disabled = true;
 });
 

@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (empty($id_card) || empty($password)) {
-        $error = 'Please fill in all fields.';
+        $error = 'Veuillez remplir tous les champs.';
     } else {
         try {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE id_card_number = ?");
@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: dashboard.php");
                 exit();
             } else {
-                $error = 'Invalid ID card number or password.';
+                $error = 'Numéro de carte d\'identité ou mot de passe invalide.';
             }
         } catch (PDOException $e) {
-            $error = 'Database error occurred.';
+            $error = 'Erreur de base de données.';
         }
     }
 }
@@ -39,11 +39,11 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Login</title>
+    <title>VoltGaz - Connexion</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -216,7 +216,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .logo p {
-            color: rgba(255, 255, 255, 0.8);
+            color: #1a1a1a;
             font-size: 1.1rem;
             font-weight: 500;
         }
@@ -230,7 +230,7 @@ if (isset($_SESSION['user_id'])) {
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
-            color: white;
+            color: #1a1a1a;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -245,7 +245,7 @@ if (isset($_SESSION['user_id'])) {
             left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: #404040;
             font-size: 1.1rem;
             z-index: 2;
         }
@@ -259,12 +259,12 @@ if (isset($_SESSION['user_id'])) {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            color: white;
+            color: #1a1a1a;
             font-weight: 500;
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(26, 26, 26, 0.5);
         }
 
         input:focus {
@@ -346,12 +346,12 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .switch-form p {
-            color: rgba(255, 255, 255, 0.8);
+            color: #2d2d2d;
             margin-bottom: 10px;
         }
 
         .switch-form a {
-            color: white;
+            color: #1a1a1a;
             text-decoration: none;
             font-weight: 700;
             transition: all 0.3s ease;
@@ -372,7 +372,7 @@ if (isset($_SESSION['user_id'])) {
         .error {
             background: rgba(239, 68, 68, 0.1);
             backdrop-filter: blur(10px);
-            color: #fecaca;
+            color: #dc2626;
             padding: 15px 20px;
             border-radius: 12px;
             margin-bottom: 25px;
@@ -465,7 +465,7 @@ if (isset($_SESSION['user_id'])) {
                 <div class="logo-pulse"></div>
             </div>
             <h1><span class="volt">Volt</span><span class="gaz">Gaz</span></h1>
-            <p>Gas & Electricity Solutions</p>
+            <p>Solutions gaz et électricité</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -479,12 +479,12 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-group">
                 <label for="id_card_number">
                     <i class="fas fa-id-card"></i>
-                    ID Card Number
+                    Numéro de carte d'identité
                 </label>
                 <div class="input-wrapper">
                     <i class="fas fa-id-card input-icon"></i>
                     <input type="text" id="id_card_number" name="id_card_number" required 
-                           placeholder="Enter your ID card number"
+                           placeholder="Entrez votre numéro de carte d'identité"
                            value="<?php echo htmlspecialchars($_POST['id_card_number'] ?? ''); ?>">
                     <div class="input-glow"></div>
                 </div>
@@ -493,27 +493,27 @@ if (isset($_SESSION['user_id'])) {
             <div class="form-group">
                 <label for="password">
                     <i class="fas fa-lock"></i>
-                    Password
+                    Mot de passe
                 </label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
                     <input type="password" id="password" name="password" required 
-                           placeholder="Enter your password">
+                           placeholder="Entrez votre mot de passe">
                     <div class="input-glow"></div>
                 </div>
             </div>
 
             <button type="submit" class="btn" id="loginBtn">
                 <i class="fas fa-sign-in-alt"></i>
-                Login to VoltGaz
+                Se connecter à VoltGaz
             </button>
         </form>
 
         <div class="switch-form">
-            <p>Don't have an account?</p>
+            <p>Vous n'avez pas de compte ?</p>
             <a href="register.php">
                 <i class="fas fa-user-plus"></i>
-                Create Account
+                Créer un compte
             </a>
         </div>
     </div>
@@ -523,7 +523,7 @@ if (isset($_SESSION['user_id'])) {
         document.getElementById('loginForm').addEventListener('submit', function() {
             const btn = document.getElementById('loginBtn');
             btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
         });
 
         // Add floating animation to inputs

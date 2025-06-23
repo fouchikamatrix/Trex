@@ -1,5 +1,5 @@
 <?php
-$page_title = "Gas History";
+$page_title = "Historique gaz";
 session_start();
 require_once 'config.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 
 // Get gas usage history
 try {
@@ -51,7 +51,7 @@ if (!empty($usage_history)) {
         return floatval($item['consumption']); 
     }, array_reverse($weekData));
 } else {
-    $weekUsageLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    $weekUsageLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
     $weekUsageData = [0, 0, 0, 0, 0, 0, 0];
 }
 
@@ -95,7 +95,7 @@ if (!empty($payment_history)) {
         return floatval($item['amount']); 
     }, array_reverse($weekPayments));
 } else {
-    $weekPaymentLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    $weekPaymentLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
     $weekPaymentData = [0, 0, 0, 0, 0, 0, 0];
 }
 
@@ -138,7 +138,7 @@ $additional_css = '
     .history-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -163,6 +163,18 @@ $additional_css = '
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
+    }
+
+    .history-header h1 {
+        color: #1a1a1a;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .history-header p {
+        color: #2d2d2d;
+        font-size: 1.2rem;
     }
 
     .history-icon {
@@ -196,7 +208,7 @@ $additional_css = '
     }
 
     .control-label {
-        color: white;
+        color: #1a1a1a;
         font-weight: 600;
         font-size: 0.9rem;
         text-transform: uppercase;
@@ -215,7 +227,7 @@ $additional_css = '
         padding: 8px 16px;
         border: none;
         background: transparent;
-        color: rgba(255, 255, 255, 0.7);
+        color: #404040;
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -225,13 +237,13 @@ $additional_css = '
 
     .period-btn.active {
         background: rgba(255, 107, 53, 0.3);
-        color: white;
+        color: #1a1a1a;
         box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
     }
 
     .period-btn:hover:not(.active) {
         background: rgba(255, 255, 255, 0.1);
-        color: white;
+        color: #1a1a1a;
     }
 
     .chart-type-selector {
@@ -243,7 +255,7 @@ $additional_css = '
         padding: 10px 15px;
         border: 2px solid rgba(255, 255, 255, 0.2);
         background: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.7);
+        color: #404040;
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -257,13 +269,13 @@ $additional_css = '
     .chart-type-btn.active {
         border-color: rgba(255, 107, 53, 0.6);
         background: rgba(255, 107, 53, 0.2);
-        color: white;
+        color: #1a1a1a;
     }
 
     .chart-type-btn:hover:not(.active) {
         border-color: rgba(255, 255, 255, 0.4);
         background: rgba(255, 255, 255, 0.15);
-        color: white;
+        color: #1a1a1a;
     }
 
     .charts-grid {
@@ -296,7 +308,7 @@ $additional_css = '
     .chart-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
@@ -323,7 +335,7 @@ $additional_css = '
 
     .stat-label {
         font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
@@ -357,7 +369,7 @@ $additional_css = '
     .table-title {
         font-size: 1.3rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
@@ -383,7 +395,7 @@ $additional_css = '
     table {
         width: 100%;
         border-collapse: collapse;
-        color: white;
+        color: #1a1a1a;
     }
 
     th, td {
@@ -395,14 +407,14 @@ $additional_css = '
     th {
         background: rgba(255, 255, 255, 0.1);
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-size: 0.85rem;
     }
 
     td {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
     }
 
     tr:hover {
@@ -456,11 +468,11 @@ const consumptionData = {
         data: ' . json_encode($weekUsageData) . '
     },
     month: {
-        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+        labels: ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4"],
         data: ' . json_encode($monthUsageData) . '
     },
     year: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
         data: ' . json_encode($yearUsageData) . '
     }
 };
@@ -471,11 +483,11 @@ const paymentsData = {
         data: ' . json_encode($weekPaymentData) . '
     },
     month: {
-        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+        labels: ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4"],
         data: ' . json_encode($monthPaymentData) . '
     },
     year: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
         data: ' . json_encode($yearPaymentData) . '
     }
 };
@@ -489,7 +501,7 @@ function initCharts() {
             data: {
                 labels: consumptionData.week.labels,
                 datasets: [{
-                    label: "Gas Consumption (m³)",
+                    label: "Consommation de gaz (m³)",
                     data: consumptionData.week.data,
                     borderColor: "#ff6b35",
                     backgroundColor: "rgba(255, 107, 53, 0.1)",
@@ -508,7 +520,7 @@ function initCharts() {
                 plugins: {
                     legend: {
                         labels: {
-                            color: "white",
+                            color: "#1a1a1a",
                             font: {
                                 size: 14,
                                 weight: "600"
@@ -519,7 +531,7 @@ function initCharts() {
                 scales: {
                     x: {
                         ticks: {
-                            color: "rgba(255, 255, 255, 0.8)",
+                            color: "#404040",
                             font: {
                                 size: 12,
                                 weight: "500"
@@ -531,7 +543,7 @@ function initCharts() {
                     },
                     y: {
                         ticks: {
-                            color: "rgba(255, 255, 255, 0.8)",
+                            color: "#404040",
                             font: {
                                 size: 12,
                                 weight: "500"
@@ -554,7 +566,7 @@ function initCharts() {
             data: {
                 labels: paymentsData.week.labels,
                 datasets: [{
-                    label: "Payments ($)",
+                    label: "Paiements ($)",
                     data: paymentsData.week.data,
                     backgroundColor: "rgba(255, 107, 53, 0.7)",
                     borderColor: "#ff6b35",
@@ -569,7 +581,7 @@ function initCharts() {
                 plugins: {
                     legend: {
                         labels: {
-                            color: "white",
+                            color: "#1a1a1a",
                             font: {
                                 size: 14,
                                 weight: "600"
@@ -580,7 +592,7 @@ function initCharts() {
                 scales: {
                     x: {
                         ticks: {
-                            color: "rgba(255, 255, 255, 0.8)",
+                            color: "#404040",
                             font: {
                                 size: 12,
                                 weight: "500"
@@ -592,7 +604,7 @@ function initCharts() {
                     },
                     y: {
                         ticks: {
-                            color: "rgba(255, 255, 255, 0.8)",
+                            color: "#404040",
                             font: {
                                 size: 12,
                                 weight: "500"
@@ -641,7 +653,7 @@ function updateStats(period) {
     
     document.getElementById("totalConsumption").textContent = totalConsumption.toFixed(1);
     document.getElementById("avgConsumption").textContent = avgConsumption.toFixed(1);
-    document.getElementById("totalPayments").textContent = "$" + totalPayments.toFixed(2);
+    document.getElementById("totalPayments").textContent = totalPayments.toFixed(2) + " $";
 }
 
 function changeChartType(chartId, type) {
@@ -657,7 +669,7 @@ function changeChartType(chartId, type) {
 }
 
 function exportData() {
-    alert("Export functionality would be implemented here");
+    alert("La fonctionnalité d\'exportation serait implémentée ici");
 }
 
 // Initialize charts when page loads
@@ -676,17 +688,17 @@ $content = '
         <div class="history-icon">
             <i class="fas fa-history"></i>
         </div>
-        <h1>Gas Usage History</h1>
-        <p>Track your gas consumption patterns and payment history</p>
+        <h1>Historique d\'utilisation du gaz</h1>
+        <p>Suivez vos habitudes de consommation de gaz et l\'historique des paiements</p>
     </div>
 
     <div class="chart-controls">
         <div class="control-group">
-            <span class="control-label">Time Period:</span>
+            <span class="control-label">Période :</span>
             <div class="period-buttons">
-                <button class="period-btn active" data-period="week" onclick="updatePeriod(\'week\')">Week</button>
-                <button class="period-btn" data-period="month" onclick="updatePeriod(\'month\')">Month</button>
-                <button class="period-btn" data-period="year" onclick="updatePeriod(\'year\')">Year</button>
+                <button class="period-btn active" data-period="week" onclick="updatePeriod(\'week\')">Semaine</button>
+                <button class="period-btn" data-period="month" onclick="updatePeriod(\'month\')">Mois</button>
+                <button class="period-btn" data-period="year" onclick="updatePeriod(\'year\')">Année</button>
             </div>
         </div>
     </div>
@@ -695,7 +707,7 @@ $content = '
         <!-- Consumption Chart -->
         <div class="chart-card">
             <div class="chart-header">
-                <h3 class="chart-title">Gas Consumption</h3>
+                <h3 class="chart-title">Consommation de gaz</h3>
                 <div class="chart-stats">
                     <div class="stat-item">
                         <div class="stat-value" id="totalConsumption">242</div>
@@ -703,28 +715,28 @@ $content = '
                     </div>
                     <div class="stat-item">
                         <div class="stat-value" id="avgConsumption">48.4</div>
-                        <div class="stat-label">Avg m³</div>
+                        <div class="stat-label">Moy m³</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value trend-up">+5.2%</div>
-                        <div class="stat-label">vs Last Period</div>
+                        <div class="stat-label">vs Période précédente</div>
                     </div>
                 </div>
             </div>
             <div class="control-group" data-chart="consumption">
-                <span class="control-label">Chart Type:</span>
+                <span class="control-label">Type de graphique :</span>
                 <div class="chart-type-selector">
                     <button class="chart-type-btn active" data-type="line" onclick="changeChartType(\'consumption\', \'line\')">
                         <i class="fas fa-chart-line"></i>
-                        Line
+                        Ligne
                     </button>
                     <button class="chart-type-btn" data-type="bar" onclick="changeChartType(\'consumption\', \'bar\')">
                         <i class="fas fa-chart-bar"></i>
-                        Bar
+                        Barres
                     </button>
                     <button class="chart-type-btn" data-type="doughnut" onclick="changeChartType(\'consumption\', \'doughnut\')">
                         <i class="fas fa-chart-pie"></i>
-                        Pie
+                        Secteurs
                     </button>
                 </div>
             </div>
@@ -736,32 +748,32 @@ $content = '
         <!-- Payments Chart -->
         <div class="chart-card">
             <div class="chart-header">
-                <h3 class="chart-title">Payment History</h3>
+                <h3 class="chart-title">Historique des paiements</h3>
                 <div class="chart-stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="totalPayments">$127.50</div>
-                        <div class="stat-label">Total Paid</div>
+                        <div class="stat-value" id="totalPayments">127,50 $</div>
+                        <div class="stat-label">Total payé</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">$0.53</div>
-                        <div class="stat-label">Per m³</div>
+                        <div class="stat-value">0,53 $</div>
+                        <div class="stat-label">Par m³</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value trend-down">-2.1%</div>
-                        <div class="stat-label">vs Last Period</div>
+                        <div class="stat-label">vs Période précédente</div>
                     </div>
                 </div>
             </div>
             <div class="control-group" data-chart="payments">
-                <span class="control-label">Chart Type:</span>
+                <span class="control-label">Type de graphique :</span>
                 <div class="chart-type-selector">
                     <button class="chart-type-btn active" data-type="bar" onclick="changeChartType(\'payments\', \'bar\')">
                         <i class="fas fa-chart-bar"></i>
-                        Bar
+                        Barres
                     </button>
                     <button class="chart-type-btn" data-type="line" onclick="changeChartType(\'payments\', \'line\')">
                         <i class="fas fa-chart-line"></i>
-                        Line
+                        Ligne
                     </button>
                 </div>
             </div>
@@ -774,21 +786,21 @@ $content = '
     <!-- Data Table -->
     <div class="data-table">
         <div class="table-header">
-            <h3 class="table-title">Detailed History</h3>
+            <h3 class="table-title">Historique détaillé</h3>
             <button class="export-btn" onclick="exportData()">
                 <i class="fas fa-download"></i>
-                Export Data
+                Exporter données
             </button>
         </div>
         <table>
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Consumption (m³)</th>
-                    <th>Rate ($/m³)</th>
-                    <th>Amount ($)</th>
-                    <th>Status</th>
-                    <th>Trend</th>
+                    <th>Consommation (m³)</th>
+                    <th>Tarif ($/m³)</th>
+                    <th>Montant ($)</th>
+                    <th>Statut</th>
+                    <th>Tendance</th>
                 </tr>
             </thead>
             <tbody>';
@@ -798,7 +810,6 @@ if(!empty($usage_history)) {
     foreach(array_slice($usage_history, 0, 10) as $usage) {
         $trend = rand(-20, 20);
         $trend_icon = '';
-        $trend_class = '';
         
         if($trend > 0) {
             $trend_icon = '<i class="fas fa-arrow-up trend-up"></i> +' . $trend . '%';
@@ -810,19 +821,19 @@ if(!empty($usage_history)) {
         
         $content .= '
                 <tr>
-                    <td>' . date('M d, Y', strtotime($usage['reading_date'])) . '</td>
+                    <td>' . date('d M Y', strtotime($usage['reading_date'])) . '</td>
                     <td>' . number_format($usage['consumption'], 1) . '</td>
-                    <td>$' . number_format($usage['rate'], 3) . '</td>
-                    <td>$' . number_format($usage['consumption'] * $usage['rate'], 2) . '</td>
-                    <td><span style="color: #22c55e;">Recorded</span></td>
+                    <td>' . number_format($usage['rate'], 3) . ' $</td>
+                    <td>' . number_format($usage['consumption'] * $usage['rate'], 2) . ' $</td>
+                    <td><span style="color: #22c55e;">Enregistré</span></td>
                     <td>' . $trend_icon . '</td>
                 </tr>';
     }
 } else {
     $content .= '
                 <tr>
-                    <td colspan="6" style="text-align: center; color: rgba(255, 255, 255, 0.6);">
-                        No usage history available. Please check back later.
+                    <td colspan="6" style="text-align: center; color: #404040;">
+                        Aucun historique d\'utilisation disponible. Veuillez revenir plus tard.
                     </td>
                 </tr>';
 }

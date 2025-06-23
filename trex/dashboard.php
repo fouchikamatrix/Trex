@@ -1,5 +1,5 @@
 <?php
-$page_title = "Dashboard";
+$page_title = "Tableau de bord";
 session_start();
 require_once 'config.php';
 
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get user data
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 
 // Set additional CSS for dashboard-specific styling
 $additional_css = '
@@ -27,7 +27,7 @@ $additional_css = '
     .dashboard-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -70,15 +70,12 @@ $additional_css = '
         font-size: 2.5rem;
         margin-bottom: 12px;
         font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
     .welcome-text p {
-        opacity: 0.9;
+        color: #2d2d2d;
         font-size: 1.2rem;
         font-weight: 500;
     }
@@ -87,7 +84,7 @@ $additional_css = '
         padding: 15px 30px;
         background: rgba(255, 255, 255, 0.2);
         border: 2px solid rgba(255, 255, 255, 0.3);
-        color: white;
+        color: #1a1a1a;
         border-radius: 12px;
         cursor: pointer;
         font-weight: 600;
@@ -199,12 +196,12 @@ $additional_css = '
     .card-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
     .card-content {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         line-height: 1.6;
         position: relative;
         z-index: 2;
@@ -246,7 +243,7 @@ $additional_css = '
 
     .info-label {
         font-weight: 600;
-        color: white;
+        color: #1a1a1a;
         font-size: 0.9rem;
         margin-bottom: 8px;
         text-transform: uppercase;
@@ -254,7 +251,7 @@ $additional_css = '
     }
 
     .info-value {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         font-size: 1.1rem;
         font-weight: 500;
         word-break: break-word;
@@ -263,7 +260,7 @@ $additional_css = '
     .coming-soon {
         text-align: center;
         padding: 80px 30px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
         border-radius: 16px;
@@ -289,7 +286,7 @@ $additional_css = '
     .coming-soon h3 {
         font-size: 1.6rem;
         margin-bottom: 15px;
-        color: white;
+        color: #1a1a1a;
         font-weight: 700;
         position: relative;
         z-index: 2;
@@ -364,12 +361,12 @@ $content = '
 <div class="dashboard">
     <div class="dashboard-header">
         <div class="welcome-text">
-            <h2>Welcome back, ' . htmlspecialchars($user_name) . '! ✨</h2>
-            <p>Manage your gas and electricity services with style</p>
+            <h2>Bon retour, ' . htmlspecialchars($user_name) . '! ✨</h2>
+            <p>Gérez vos services de gaz et d\'électricité avec style</p>
         </div>
         <a href="logout.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
-            Logout
+            Déconnexion
         </a>
     </div>
     
@@ -378,24 +375,24 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">👤</div>
-                <div class="card-title">Profile Information</div>
+                <div class="card-title">Informations du profil</div>
             </div>
             <div class="card-content">
                 <div class="info-grid">
                     <div class="info-item">
-                        <div class="info-label">Full Name</div>
+                        <div class="info-label">Nom complet</div>
                         <div class="info-value">' . htmlspecialchars(($user_data['name'] ?? '') . ' ' . ($user_data['last_name'] ?? '')) . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">ID Card Number</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Not provided') . '</div>
+                        <div class="info-label">Numéro de carte d\'identité</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Non fourni') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Reference</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['reference'] ?? 'Not provided') . '</div>
+                        <div class="info-label">Référence</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['reference'] ?? 'Non fournie') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Client Type</div>
+                        <div class="info-label">Type de client</div>
                         <div class="info-value">' . htmlspecialchars(ucfirst($user_data['client_type'] ?? 'Standard')) . '</div>
                     </div>
                 </div>
@@ -406,25 +403,25 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">📞</div>
-                <div class="card-title">Contact Information</div>
+                <div class="card-title">Informations de contact</div>
             </div>
             <div class="card-content">
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">Email</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['email'] ?? 'Not provided') . '</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['email'] ?? 'Non fourni') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Phone</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['phone'] ?? 'Not provided') . '</div>
+                        <div class="info-label">Téléphone</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['phone'] ?? 'Non fourni') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Address</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['address'] ?? 'Not provided') . '</div>
+                        <div class="info-label">Adresse</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['address'] ?? 'Non fournie') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">City</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['city'] ?? 'Not provided') . '</div>
+                        <div class="info-label">Ville</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['city'] ?? 'Non fournie') . '</div>
                     </div>
                 </div>
             </div>
@@ -434,25 +431,25 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">⚡</div>
-                <div class="card-title">Counter Information</div>
+                <div class="card-title">Informations des compteurs</div>
             </div>
             <div class="card-content">
                 <div class="info-grid">
                     <div class="info-item">
-                        <div class="info-label">Gas Counter</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Not assigned') . '</div>
+                        <div class="info-label">Compteur de gaz</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Non assigné') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Electric Counter</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Not assigned') . '</div>
+                        <div class="info-label">Compteur électrique</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Non assigné') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Electric Counter Type</div>
+                        <div class="info-label">Type de compteur électrique</div>
                         <div class="info-value">' . htmlspecialchars(ucfirst($user_data['electric_counter_type'] ?? 'Standard')) . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Installation Date</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Not available') . '</div>
+                        <div class="info-label">Date d\'installation</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Non disponible') . '</div>
                     </div>
                 </div>
             </div>
@@ -462,25 +459,25 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">⚡</div>
-                <div class="card-title">Quick Actions</div>
+                <div class="card-title">Actions rapides</div>
             </div>
             <div class="card-content">
                 <div class="info-grid">
                     <div class="info-item" style="cursor: pointer;" onclick="window.location.href=\'gas_bill.php\'">
-                        <div class="info-label">View Gas Bill</div>
-                        <div class="info-value">Check your latest gas bill</div>
+                        <div class="info-label">Voir la facture de gaz</div>
+                        <div class="info-value">Consultez votre dernière facture de gaz</div>
                     </div>
                     <div class="info-item" style="cursor: pointer;" onclick="window.location.href=\'electricity_bill.php\'">
-                        <div class="info-label">View Electricity Bill</div>
-                        <div class="info-value">Check your latest electricity bill</div>
+                        <div class="info-label">Voir la facture d\'électricité</div>
+                        <div class="info-value">Consultez votre dernière facture d\'électricité</div>
                     </div>
                     <div class="info-item" style="cursor: pointer;" onclick="window.location.href=\'gas_payment.php\'">
-                        <div class="info-label">Make Payment</div>
-                        <div class="info-value">Pay your bills online</div>
+                        <div class="info-label">Effectuer un paiement</div>
+                        <div class="info-value">Payez vos factures en ligne</div>
                     </div>
                     <div class="info-item" style="cursor: pointer;" onclick="window.location.href=\'gas_contact.php\'">
-                        <div class="info-label">Contact Support</div>
-                        <div class="info-value">Get help and support</div>
+                        <div class="info-label">Contacter le support</div>
+                        <div class="info-value">Obtenez de l\'aide et du support</div>
                     </div>
                 </div>
             </div>
@@ -490,25 +487,25 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">📊</div>
-                <div class="card-title">Account Status</div>
+                <div class="card-title">Statut du compte</div>
             </div>
             <div class="card-content">
                 <div class="info-grid">
                     <div class="info-item">
-                        <div class="info-label">Account Status</div>
-                        <div class="info-value" style="color: #4ade80;">Active</div>
+                        <div class="info-label">Statut du compte</div>
+                        <div class="info-value" style="color: #4ade80;">Actif</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Last Payment</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['last_payment'] ?? 'No payments yet') . '</div>
+                        <div class="info-label">Dernier paiement</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['last_payment'] ?? 'Aucun paiement encore') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Next Bill Date</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['next_bill_date'] ?? 'Not scheduled') . '</div>
+                        <div class="info-label">Date de la prochaine facture</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['next_bill_date'] ?? 'Non programmée') . '</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Service Plan</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['service_plan'] ?? 'Standard Plan') . '</div>
+                        <div class="info-label">Plan de service</div>
+                        <div class="info-value">' . htmlspecialchars($user_data['service_plan'] ?? 'Plan Standard') . '</div>
                     </div>
                 </div>
             </div>
@@ -518,12 +515,12 @@ $content = '
         <div class="card">
             <div class="card-header">
                 <div class="card-icon">📋</div>
-                <div class="card-title">Recent Activity</div>
+                <div class="card-title">Activité récente</div>
             </div>
             <div class="card-content">
                 <div class="coming-soon">
-                    <h3>Activity Log Coming Soon</h3>
-                    <p>Track your recent transactions, bill payments, and service requests.</p>
+                    <h3>Journal d\'activité bientôt disponible</h3>
+                    <p>Suivez vos transactions récentes, paiements de factures et demandes de service.</p>
                 </div>
             </div>
         </div>

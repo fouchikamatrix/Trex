@@ -1,5 +1,5 @@
 <?php
-$page_title = "Electricity Information";
+$page_title = "Informations électricité";
 session_start();
 require_once 'config.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 
 $additional_css = '
     .info-container {
@@ -22,7 +22,7 @@ $additional_css = '
     .info-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -47,6 +47,18 @@ $additional_css = '
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
+    }
+
+    .info-header h1 {
+        color: #1a1a1a;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .info-header p {
+        color: #2d2d2d;
+        font-size: 1.2rem;
     }
 
     .info-icon {
@@ -92,7 +104,7 @@ $additional_css = '
     .card-title {
         font-size: 1.3rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
@@ -125,13 +137,13 @@ $additional_css = '
 
     .stat-label {
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .info-content {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         line-height: 1.6;
     }
 
@@ -154,11 +166,11 @@ $additional_css = '
 
     .info-label {
         font-weight: 600;
-        color: white;
+        color: #1a1a1a;
     }
 
     .info-value {
-        color: rgba(255, 255, 255, 0.8);
+        color: #2d2d2d;
     }
 
     @media (max-width: 768px) {
@@ -178,37 +190,37 @@ $content = '
         <div class="info-icon">
             <i class="fas fa-info-circle"></i>
         </div>
-        <h1>Electricity Service Information</h1>
-        <p>Detailed information about your electricity service and account</p>
+        <h1>Informations du service électrique</h1>
+        <p>Informations détaillées sur votre service électrique et votre compte</p>
     </div>
 
     <div class="info-grid">
         <!-- Account Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Account Details</h3>
+                <h3 class="card-title">Détails du compte</h3>
                 <i class="fas fa-user card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Account Number</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Not assigned') . '</span>
+                    <span class="info-label">Numéro de compte</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Non assigné') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Customer ID</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Not provided') . '</span>
+                    <span class="info-label">ID client</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Non fourni') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Service Type</span>
-                    <span class="info-value">Residential Electricity</span>
+                    <span class="info-label">Type de service</span>
+                    <span class="info-value">Électricité résidentielle</span>
                 </li>
                 <li>
-                    <span class="info-label">Connection Date</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Not available') . '</span>
+                    <span class="info-label">Date de connexion</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Non disponible') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Tariff Plan</span>
-                    <span class="info-value">Time-of-Use Residential</span>
+                    <span class="info-label">Plan tarifaire</span>
+                    <span class="info-value">Résidentiel à tarification horaire</span>
                 </li>
             </ul>
         </div>
@@ -216,29 +228,29 @@ $content = '
         <!-- Meter Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Meter Information</h3>
+                <h3 class="card-title">Informations du compteur</h3>
                 <i class="fas fa-tachometer-alt card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Meter Number</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Not assigned') . '</span>
+                    <span class="info-label">Numéro de compteur</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['electric_counter_number'] ?? 'Non assigné') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Meter Type</span>
-                    <span class="info-value">' . ucfirst($user_data['electric_counter_type'] ?? 'Standard') . ' Smart Meter</span>
+                    <span class="info-label">Type de compteur</span>
+                    <span class="info-value">' . ucfirst($user_data['electric_counter_type'] ?? 'Standard') . ' Compteur intelligent</span>
                 </li>
                 <li>
-                    <span class="info-label">Last Reading</span>
+                    <span class="info-label">Dernière lecture</span>
                     <span class="info-value">8,547 kWh</span>
                 </li>
                 <li>
-                    <span class="info-label">Reading Date</span>
-                    <span class="info-value">' . date('M d, Y', strtotime('-3 days')) . '</span>
+                    <span class="info-label">Date de lecture</span>
+                    <span class="info-value">' . date('d M Y', strtotime('-3 days')) . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Next Reading</span>
-                    <span class="info-value">' . date('M d, Y', strtotime('+27 days')) . '</span>
+                    <span class="info-label">Prochaine lecture</span>
+                    <span class="info-value">' . date('d M Y', strtotime('+27 days')) . '</span>
                 </li>
             </ul>
         </div>
@@ -246,13 +258,13 @@ $content = '
         <!-- Service Statistics -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Service Statistics</h3>
+                <h3 class="card-title">Statistiques du service</h3>
                 <i class="fas fa-chart-line card-icon"></i>
             </div>
             <div class="info-stats">
                 <div class="stat-item">
                     <div class="stat-value">99.2%</div>
-                    <div class="stat-label">Uptime</div>
+                    <div class="stat-label">Disponibilité</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">24/7</div>
@@ -260,44 +272,44 @@ $content = '
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">3</div>
-                    <div class="stat-label">Years</div>
+                    <div class="stat-label">Années</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">1</div>
-                    <div class="stat-label">Outage</div>
+                    <div class="stat-label">Panne</div>
                 </div>
             </div>
             <div class="info-content">
-                <p>Your electricity service maintains high reliability with smart grid technology. Our automated systems quickly detect and resolve most issues before they affect your service.</p>
+                <p>Votre service électrique maintient une haute fiabilité grâce à la technologie de réseau intelligent. Nos systèmes automatisés détectent et résolvent rapidement la plupart des problèmes avant qu\'ils n\'affectent votre service.</p>
             </div>
         </div>
 
         <!-- Contact Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Emergency Contacts</h3>
+                <h3 class="card-title">Contacts d\'urgence</h3>
                 <i class="fas fa-phone card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Power Outage Hotline</span>
+                    <span class="info-label">Ligne d\'urgence panne</span>
                     <span class="info-value">+1 (555) 911-POWER</span>
                 </li>
                 <li>
-                    <span class="info-label">Customer Service</span>
+                    <span class="info-label">Service client</span>
                     <span class="info-value">+1 (555) 123-4567</span>
                 </li>
                 <li>
-                    <span class="info-label">Technical Support</span>
+                    <span class="info-label">Support technique</span>
                     <span class="info-value">+1 (555) 789-0123</span>
                 </li>
                 <li>
-                    <span class="info-label">Email Support</span>
+                    <span class="info-label">Support par email</span>
                     <span class="info-value">electric@voltgaz.com</span>
                 </li>
                 <li>
-                    <span class="info-label">Service Hours</span>
-                    <span class="info-value">24/7 Emergency</span>
+                    <span class="info-label">Heures de service</span>
+                    <span class="info-value">24/7 Urgence</span>
                 </li>
             </ul>
         </div>
@@ -305,29 +317,29 @@ $content = '
         <!-- Rate Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Rate Structure</h3>
+                <h3 class="card-title">Structure tarifaire</h3>
                 <i class="fas fa-dollar-sign card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Peak Hours (2-8 PM)</span>
-                    <span class="info-value">$0.28 per kWh</span>
+                    <span class="info-label">Heures de pointe (14h-20h)</span>
+                    <span class="info-value">0,28 $ par kWh</span>
                 </li>
                 <li>
-                    <span class="info-label">Off-Peak Hours</span>
-                    <span class="info-value">$0.12 per kWh</span>
+                    <span class="info-label">Heures creuses</span>
+                    <span class="info-value">0,12 $ par kWh</span>
                 </li>
                 <li>
-                    <span class="info-label">Weekend Rate</span>
-                    <span class="info-value">$0.10 per kWh</span>
+                    <span class="info-label">Tarif week-end</span>
+                    <span class="info-value">0,10 $ par kWh</span>
                 </li>
                 <li>
-                    <span class="info-label">Connection Fee</span>
-                    <span class="info-value">$15.00/month</span>
+                    <span class="info-label">Frais de connexion</span>
+                    <span class="info-value">15,00 $/mois</span>
                 </li>
                 <li>
-                    <span class="info-label">Average Monthly</span>
-                    <span class="info-value">$185.75</span>
+                    <span class="info-label">Moyenne mensuelle</span>
+                    <span class="info-value">185,75 $</span>
                 </li>
             </ul>
         </div>
@@ -335,16 +347,16 @@ $content = '
         <!-- Energy Efficiency -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Energy Efficiency Tips</h3>
+                <h3 class="card-title">Conseils d\'efficacité énergétique</h3>
                 <i class="fas fa-leaf card-icon"></i>
             </div>
             <div class="info-content">
-                <ul style="list-style: disc; padding-left: 20px; color: rgba(255, 255, 255, 0.9);">
-                    <li style="margin-bottom: 10px;">Use LED bulbs to reduce lighting costs by 75%</li>
-                    <li style="margin-bottom: 10px;">Set thermostat 2-3 degrees higher in summer</li>
-                    <li style="margin-bottom: 10px;">Unplug electronics when not in use</li>
-                    <li style="margin-bottom: 10px;">Use programmable thermostats</li>
-                    <li style="margin-bottom: 10px;">Schedule high-energy tasks during off-peak hours</li>
+                <ul style="list-style: disc; padding-left: 20px; color: #2d2d2d;">
+                    <li style="margin-bottom: 10px;">Utilisez des ampoules LED pour réduire les coûts d\'éclairage de 75%</li>
+                    <li style="margin-bottom: 10px;">Réglez le thermostat 2-3 degrés plus haut en été</li>
+                    <li style="margin-bottom: 10px;">Débranchez les appareils électroniques non utilisés</li>
+                    <li style="margin-bottom: 10px;">Utilisez des thermostats programmables</li>
+                    <li style="margin-bottom: 10px;">Planifiez les tâches énergivores pendant les heures creuses</li>
                 </ul>
             </div>
         </div>

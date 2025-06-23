@@ -1,5 +1,5 @@
 <?php
-$page_title = "Gas Information";
+$page_title = "Informations gaz";
 session_start();
 require_once 'config.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 
 // Get gas information data
 try {
@@ -37,7 +37,7 @@ $additional_css = '
     .info-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -62,6 +62,18 @@ $additional_css = '
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
+    }
+
+    .info-header h1 {
+        color: #1a1a1a;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .info-header p {
+        color: #2d2d2d;
+        font-size: 1.2rem;
     }
 
     .info-icon {
@@ -107,7 +119,7 @@ $additional_css = '
     .card-title {
         font-size: 1.3rem;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-family: "Poppins", sans-serif;
     }
 
@@ -140,13 +152,13 @@ $additional_css = '
 
     .stat-label {
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .info-content {
-        color: rgba(255, 255, 255, 0.9);
+        color: #2d2d2d;
         line-height: 1.6;
     }
 
@@ -169,17 +181,17 @@ $additional_css = '
 
     .info-label {
         font-weight: 600;
-        color: white;
+        color: #1a1a1a;
     }
 
     .info-value {
-        color: rgba(255, 255, 255, 0.8);
+        color: #2d2d2d;
     }
 
     .no-info {
         text-align: center;
         padding: 60px 30px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -208,37 +220,37 @@ $content = '
         <div class="info-icon">
             <i class="fas fa-info-circle"></i>
         </div>
-        <h1>Gas Service Information</h1>
-        <p>Detailed information about your gas service and account</p>
+        <h1>Informations du service gaz</h1>
+        <p>Informations détaillées sur votre service gaz et votre compte</p>
     </div>
 
     <div class="info-grid">
         <!-- Account Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Account Details</h3>
+                <h3 class="card-title">Détails du compte</h3>
                 <i class="fas fa-user card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Account Number</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Not assigned') . '</span>
+                    <span class="info-label">Numéro de compte</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Non assigné') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Customer ID</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Not provided') . '</span>
+                    <span class="info-label">ID client</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['id_card_number'] ?? 'Non fourni') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Service Type</span>
-                    <span class="info-value">Residential Gas</span>
+                    <span class="info-label">Type de service</span>
+                    <span class="info-value">Gaz résidentiel</span>
                 </li>
                 <li>
-                    <span class="info-label">Connection Date</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Not available') . '</span>
+                    <span class="info-label">Date de connexion</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['installation_date'] ?? 'Non disponible') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Tariff Plan</span>
-                    <span class="info-value">Standard Residential</span>
+                    <span class="info-label">Plan tarifaire</span>
+                    <span class="info-value">Résidentiel standard</span>
                 </li>
             </ul>
         </div>
@@ -246,29 +258,29 @@ $content = '
         <!-- Meter Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Meter Information</h3>
+                <h3 class="card-title">Informations du compteur</h3>
                 <i class="fas fa-tachometer-alt card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Meter Number</span>
-                    <span class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Not assigned') . '</span>
+                    <span class="info-label">Numéro de compteur</span>
+                    <span class="info-value">' . htmlspecialchars($user_data['gas_counter_number'] ?? 'Non assigné') . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Meter Type</span>
-                    <span class="info-value">Digital Smart Meter</span>
+                    <span class="info-label">Type de compteur</span>
+                    <span class="info-value">Compteur intelligent numérique</span>
                 </li>
                 <li>
-                    <span class="info-label">Last Reading</span>
+                    <span class="info-label">Dernière lecture</span>
                     <span class="info-value">1,247 m³</span>
                 </li>
                 <li>
-                    <span class="info-label">Reading Date</span>
-                    <span class="info-value">' . date('M d, Y', strtotime('-5 days')) . '</span>
+                    <span class="info-label">Date de lecture</span>
+                    <span class="info-value">' . date('d M Y', strtotime('-5 days')) . '</span>
                 </li>
                 <li>
-                    <span class="info-label">Next Reading</span>
-                    <span class="info-value">' . date('M d, Y', strtotime('+25 days')) . '</span>
+                    <span class="info-label">Prochaine lecture</span>
+                    <span class="info-value">' . date('d M Y', strtotime('+25 days')) . '</span>
                 </li>
             </ul>
         </div>
@@ -276,13 +288,13 @@ $content = '
         <!-- Service Statistics -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Service Statistics</h3>
+                <h3 class="card-title">Statistiques du service</h3>
                 <i class="fas fa-chart-bar card-icon"></i>
             </div>
             <div class="info-stats">
                 <div class="stat-item">
                     <div class="stat-value">98.5%</div>
-                    <div class="stat-label">Uptime</div>
+                    <div class="stat-label">Disponibilité</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">24/7</div>
@@ -290,44 +302,44 @@ $content = '
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">5</div>
-                    <div class="stat-label">Years</div>
+                    <div class="stat-label">Années</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">0</div>
-                    <div class="stat-label">Issues</div>
+                    <div class="stat-label">Problèmes</div>
                 </div>
             </div>
             <div class="info-content">
-                <p>Your gas service has maintained excellent reliability with minimal interruptions. Our 24/7 support team is always available for any assistance you may need.</p>
+                <p>Votre service gaz a maintenu une excellente fiabilité avec des interruptions minimales. Notre équipe de support 24/7 est toujours disponible pour toute assistance dont vous pourriez avoir besoin.</p>
             </div>
         </div>
 
         <!-- Contact Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Emergency Contacts</h3>
+                <h3 class="card-title">Contacts d\'urgence</h3>
                 <i class="fas fa-phone card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Emergency Hotline</span>
-                    <span class="info-value">+1 (555) 911-GAS</span>
+                    <span class="info-label">Ligne d\'urgence</span>
+                    <span class="info-value">+1 (555) 911-GAZ</span>
                 </li>
                 <li>
-                    <span class="info-label">Customer Service</span>
+                    <span class="info-label">Service client</span>
                     <span class="info-value">+1 (555) 123-4567</span>
                 </li>
                 <li>
-                    <span class="info-label">Technical Support</span>
+                    <span class="info-label">Support technique</span>
                     <span class="info-value">+1 (555) 789-0123</span>
                 </li>
                 <li>
-                    <span class="info-label">Email Support</span>
+                    <span class="info-label">Support par email</span>
                     <span class="info-value">gas@voltgaz.com</span>
                 </li>
                 <li>
-                    <span class="info-label">Service Hours</span>
-                    <span class="info-value">24/7 Emergency</span>
+                    <span class="info-label">Heures de service</span>
+                    <span class="info-value">24/7 Urgence</span>
                 </li>
             </ul>
         </div>
@@ -335,16 +347,16 @@ $content = '
         <!-- Safety Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Safety Guidelines</h3>
+                <h3 class="card-title">Consignes de sécurité</h3>
                 <i class="fas fa-shield-alt card-icon"></i>
             </div>
             <div class="info-content">
-                <ul style="list-style: disc; padding-left: 20px; color: rgba(255, 255, 255, 0.9);">
-                    <li style="margin-bottom: 10px;">Never ignore the smell of gas - evacuate immediately</li>
-                    <li style="margin-bottom: 10px;">Keep gas appliances well-ventilated</li>
-                    <li style="margin-bottom: 10px;">Schedule annual safety inspections</li>
-                    <li style="margin-bottom: 10px;">Know the location of your gas shut-off valve</li>
-                    <li style="margin-bottom: 10px;">Install gas detectors in your home</li>
+                <ul style="list-style: disc; padding-left: 20px; color: #2d2d2d;">
+                    <li style="margin-bottom: 10px;">N\'ignorez jamais l\'odeur de gaz - évacuez immédiatement</li>
+                    <li style="margin-bottom: 10px;">Gardez les appareils à gaz bien ventilés</li>
+                    <li style="margin-bottom: 10px;">Planifiez des inspections de sécurité annuelles</li>
+                    <li style="margin-bottom: 10px;">Connaissez l\'emplacement de votre vanne d\'arrêt de gaz</li>
+                    <li style="margin-bottom: 10px;">Installez des détecteurs de gaz dans votre maison</li>
                 </ul>
             </div>
         </div>
@@ -352,29 +364,29 @@ $content = '
         <!-- Billing Information -->
         <div class="info-card">
             <div class="card-header">
-                <h3 class="card-title">Billing Information</h3>
+                <h3 class="card-title">Informations de facturation</h3>
                 <i class="fas fa-file-invoice-dollar card-icon"></i>
             </div>
             <ul class="info-list">
                 <li>
-                    <span class="info-label">Billing Cycle</span>
-                    <span class="info-value">Monthly</span>
+                    <span class="info-label">Cycle de facturation</span>
+                    <span class="info-value">Mensuel</span>
                 </li>
                 <li>
-                    <span class="info-label">Due Date</span>
-                    <span class="info-value">' . date('jS', strtotime('+15 days')) . ' of each month</span>
+                    <span class="info-label">Date d\'échéance</span>
+                    <span class="info-value">' . date('jS', strtotime('+15 days')) . ' de chaque mois</span>
                 </li>
                 <li>
-                    <span class="info-label">Payment Method</span>
-                    <span class="info-value">Auto-Pay Enabled</span>
+                    <span class="info-label">Mode de paiement</span>
+                    <span class="info-value">Paiement automatique activé</span>
                 </li>
                 <li>
-                    <span class="info-label">Current Rate</span>
-                    <span class="info-value">$0.85 per m³</span>
+                    <span class="info-label">Tarif actuel</span>
+                    <span class="info-value">0,85 $ par m³</span>
                 </li>
                 <li>
-                    <span class="info-label">Average Monthly</span>
-                    <span class="info-value">$127.50</span>
+                    <span class="info-label">Moyenne mensuelle</span>
+                    <span class="info-value">127,50 $</span>
                 </li>
             </ul>
         </div>
@@ -383,4 +395,3 @@ $content = '
 
 include 'layout.php';
 ?>
-

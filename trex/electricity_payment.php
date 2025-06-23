@@ -1,5 +1,5 @@
 <?php
-$page_title = "Electricity Payment";
+$page_title = "Paiement électricité";
 session_start();
 require_once 'config.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_data = $_SESSION['user_data'] ?? [];
-$user_name = $_SESSION['user_name'] ?? 'User';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 $success_message = '';
 $error_message = '';
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $amount = $_POST['amount'] ?? '';
     
     if (empty($bill_id) || empty($payment_method) || empty($amount)) {
-        $error_message = 'Please fill in all required fields.';
+        $error_message = 'Veuillez remplir tous les champs obligatoires.';
     } else {
         try {
             // Verify bill belongs to user
@@ -43,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $bill = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (!$bill) {
-                $error_message = 'Invalid bill selected.';
+                $error_message = 'Facture sélectionnée invalide.';
             } elseif (floatval($amount) !== floatval($bill['amount'])) {
-                $error_message = 'Payment amount does not match bill amount.';
+                $error_message = 'Le montant du paiement ne correspond pas au montant de la facture.';
             } else {
                 // Create payment record
                 $transaction_id = 'TXN' . time() . rand(1000, 9999);
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("UPDATE bills SET status = 'paid', paid_at = NOW() WHERE id = ?");
                 $stmt->execute([$bill_id]);
                 
-                $success_message = "Payment successful! Transaction ID: $transaction_id";
+                $success_message = "Paiement réussi ! ID de transaction : $transaction_id";
                 
                 // Refresh pending bills
                 $stmt = $pdo->prepare("
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pending_bills = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         } catch (PDOException $e) {
-            $error_message = 'Payment processing failed. Please try again.';
+            $error_message = 'Le traitement du paiement a échoué. Veuillez réessayer.';
             error_log("Payment error: " . $e->getMessage());
         }
     }
@@ -90,7 +90,7 @@ $additional_css = '
     .payment-header {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(20px);
-        color: white;
+        color: #1a1a1a;
         padding: 40px;
         border-radius: 20px;
         margin-bottom: 35px;
@@ -115,6 +115,18 @@ $additional_css = '
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
+    }
+
+    .payment-header h1 {
+        color: #1a1a1a;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .payment-header p {
+        color: #2d2d2d;
+        font-size: 1.2rem;
     }
 
     .payment-icon {
@@ -174,13 +186,13 @@ $additional_css = '
     }
 
     .bill-details h4 {
-        color: white;
+        color: #1a1a1a;
         font-size: 1.1rem;
         margin-bottom: 5px;
     }
 
     .bill-details p {
-        color: rgba(255, 255, 255, 0.7);
+        color: #404040;
         font-size: 0.9rem;
     }
 
@@ -198,7 +210,7 @@ $additional_css = '
         display: block;
         margin-bottom: 10px;
         font-weight: 700;
-        color: white;
+        color: #1a1a1a;
         font-size: 0.95rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -213,7 +225,7 @@ $additional_css = '
         font-size: 1rem;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        color: white;
+        color: #1a1a1a;
         font-weight: 500;
     }
 
@@ -258,12 +270,12 @@ $additional_css = '
     .payment-method i {
         font-size: 2rem;
         margin-bottom: 10px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
     }
 
     .payment-method span {
         display: block;
-        color: white;
+        color: #1a1a1a;
         font-weight: 600;
     }
 
@@ -305,22 +317,29 @@ $additional_css = '
 
     .alert.success {
         background: rgba(34, 197, 94, 0.1);
-        color: #bbf7d0;
+        color: #16a34a;
         border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
     .alert.error {
         background: rgba(239, 68, 68, 0.1);
-        color: #fecaca;
+        color: #dc2626;
         border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
     .no-bills {
         text-align: center;
         padding: 60px 30px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #404040;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
+    }
+
+    .no-bills h3 {
+        color: #1a1a1a;
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+        font-weight: 700;
     }
 
     @media (max-width: 768px) {
@@ -345,8 +364,8 @@ $content = '
         <div class="payment-icon">
             <i class="fas fa-credit-card"></i>
         </div>
-        <h1>Electricity Payment</h1>
-        <p>Pay your electricity bills securely online</p>
+        <h1>Paiement électricité</h1>
+        <p>Payez vos factures d\'électricité en ligne en toute sécurité</p>
     </div>
 
     ' . (!empty($success_message) ? '<div class="alert success"><i class="fas fa-check-circle"></i>' . htmlspecialchars($success_message) . '</div>' : '') . '
@@ -360,7 +379,7 @@ if (!empty($pending_bills)) {
             <div class="form-group">
                 <label>
                     <i class="fas fa-file-invoice"></i>
-                    Select Bill to Pay
+                    Sélectionner la facture à payer
                 </label>
                 <div class="bill-selector">';
     
@@ -370,10 +389,10 @@ if (!empty($pending_bills)) {
                         <input type="radio" name="bill_id" value="' . $bill['id'] . '" required>
                         <div class="bill-info">
                             <div class="bill-details">
-                                <h4>Bill #' . htmlspecialchars($bill['bill_number']) . '</h4>
-                                <p>Due: ' . date('M d, Y', strtotime($bill['due_date'])) . ' | ' . $bill['consumption'] . ' ' . $bill['unit'] . '</p>
+                                <h4>Facture #' . htmlspecialchars($bill['bill_number']) . '</h4>
+                                <p>Échéance : ' . date('d M Y', strtotime($bill['due_date'])) . ' | ' . $bill['consumption'] . ' ' . $bill['unit'] . '</p>
                             </div>
-                            <div class="bill-amount">$' . number_format($bill['amount'], 2) . '</div>
+                            <div class="bill-amount">' . number_format($bill['amount'], 2) . ' $</div>
                         </div>
                     </div>';
     }
@@ -385,7 +404,7 @@ if (!empty($pending_bills)) {
             <div class="form-group">
                 <label>
                     <i class="fas fa-dollar-sign"></i>
-                    Payment Amount
+                    Montant du paiement
                 </label>
                 <input type="number" name="amount" id="paymentAmount" step="0.01" readonly required>
             </div>
@@ -393,40 +412,40 @@ if (!empty($pending_bills)) {
             <div class="form-group">
                 <label>
                     <i class="fas fa-credit-card"></i>
-                    Payment Method
+                    Mode de paiement
                 </label>
                 <div class="payment-methods">
                     <div class="payment-method" onclick="selectPaymentMethod(this, \'credit_card\')">
                         <input type="radio" name="payment_method" value="credit_card" required>
                         <i class="fas fa-credit-card"></i>
-                        <span>Credit Card</span>
+                        <span>Carte de crédit</span>
                     </div>
                     <div class="payment-method" onclick="selectPaymentMethod(this, \'bank_transfer\')">
                         <input type="radio" name="payment_method" value="bank_transfer" required>
                         <i class="fas fa-university"></i>
-                        <span>Bank Transfer</span>
+                        <span>Virement bancaire</span>
                     </div>
                     <div class="payment-method" onclick="selectPaymentMethod(this, \'cash\')">
                         <input type="radio" name="payment_method" value="cash" required>
                         <i class="fas fa-money-bill"></i>
-                        <span>Cash</span>
+                        <span>Espèces</span>
                     </div>
                 </div>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn" disabled>
                 <i class="fas fa-lock"></i>
-                Process Payment
+                Traiter le paiement
             </button>
         </form>';
 } else {
     $content .= '
         <div class="no-bills">
             <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;"></i>
-            <h3>No Pending Bills</h3>
-            <p>You don\'t have any pending electricity bills to pay at the moment.</p>
+            <h3>Aucune facture en attente</h3>
+            <p>Vous n\'avez aucune facture d\'électricité en attente de paiement pour le moment.</p>
             <a href="electricity_bill.php" style="color: #4dabf7; text-decoration: none; font-weight: 600; margin-top: 15px; display: inline-block;">
-                <i class="fas fa-arrow-left"></i> View All Bills
+                <i class="fas fa-arrow-left"></i> Voir toutes les factures
             </a>
         </div>';
 }
@@ -474,10 +493,10 @@ function checkFormCompletion() {
     
     if (billSelected && paymentMethodSelected) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = \'<i class="fas fa-credit-card"></i> Process Payment\';
+        submitBtn.innerHTML = \'<i class="fas fa-credit-card"></i> Traiter le paiement\';
     } else {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = \'<i class="fas fa-lock"></i> Select Bill & Payment Method\';
+        submitBtn.innerHTML = \'<i class="fas fa-lock"></i> Sélectionner facture et mode de paiement\';
     }
 }
 
@@ -485,7 +504,7 @@ function checkFormCompletion() {
 document.getElementById("paymentForm")?.addEventListener("submit", function() {
     const btn = document.getElementById("submitBtn");
     btn.disabled = true;
-    btn.innerHTML = \'<i class="fas fa-spinner fa-spin"></i> Processing...\';
+    btn.innerHTML = \'<i class="fas fa-spinner fa-spin"></i> Traitement en cours...\';
 });
 ';
 
