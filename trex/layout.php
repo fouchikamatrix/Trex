@@ -19,7 +19,7 @@ if (isset($_GET['switch_service']) && in_array($_GET['switch_service'], ['gas', 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($page_title) ? $page_title . ' - VoltGaz' : 'VoltGaz - Gas & Electricity Management'; ?></title>
+    <title><?php echo isset($page_title) ? $page_title . ' - Gaztronik' : 'Gaztronik - Gas & Electricity Management'; ?></title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

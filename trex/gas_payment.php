@@ -396,7 +396,7 @@ if (!empty($pending_bills)) {
 
             <div class="form-group">
                 <label>
-                    <i class="fas fa-euro-sign"></i>
+                    (TND)
                     Montant du paiement
                 </label>
                 <input type="number" name="amount" id="paymentAmount" step="0.01" readonly required>

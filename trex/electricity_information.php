@@ -293,19 +293,19 @@ $content = '
             <ul class="info-list">
                 <li>
                     <span class="info-label">Ligne d\'urgence panne</span>
-                    <span class="info-value">+1 (555) 911-POWER</span>
+                    <span class="info-value">+1 (216) 197</span>
                 </li>
                 <li>
                     <span class="info-label">Service client</span>
-                    <span class="info-value">+1 (555) 123-4567</span>
+                    <span class="info-value">+1 (216) 95-956-654</span>
                 </li>
                 <li>
                     <span class="info-label">Support technique</span>
-                    <span class="info-value">+1 (555) 789-0123</span>
+                    <span class="info-value">+1 (216) 92-654-564</span>
                 </li>
                 <li>
                     <span class="info-label">Support par email</span>
-                    <span class="info-value">electric@voltgaz.com</span>
+                    <span class="info-value">electric@GasTronik.com</span>
                 </li>
                 <li>
                     <span class="info-label">Heures de service</span>
@@ -318,28 +318,28 @@ $content = '
         <div class="info-card">
             <div class="card-header">
                 <h3 class="card-title">Structure tarifaire</h3>
-                <i class="fas fa-dollar-sign card-icon"></i>
+                TND
             </div>
             <ul class="info-list">
                 <li>
                     <span class="info-label">Heures de pointe (14h-20h)</span>
-                    <span class="info-value">0,28 $ par kWh</span>
+                    <span class="info-value">0,28 TND par kWh</span>
                 </li>
                 <li>
                     <span class="info-label">Heures creuses</span>
-                    <span class="info-value">0,12 $ par kWh</span>
+                    <span class="info-value">0,12 TND par kWh</span>
                 </li>
                 <li>
                     <span class="info-label">Tarif week-end</span>
-                    <span class="info-value">0,10 $ par kWh</span>
+                    <span class="info-value">0,10 TND par kWh</span>
                 </li>
                 <li>
                     <span class="info-label">Frais de connexion</span>
-                    <span class="info-value">15,00 $/mois</span>
+                    <span class="info-value">15,00 TND/mois</span>
                 </li>
                 <li>
                     <span class="info-label">Moyenne mensuelle</span>
-                    <span class="info-value">185,75 $</span>
+                    <span class="info-value">185,75 TND</span>
                 </li>
             </ul>
         </div>

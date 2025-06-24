@@ -95,7 +95,7 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
                     ];
                     
                     $current_page = basename($_SERVER['PHP_SELF']);
-                    echo isset($page_titles[$current_page]) ? $page_titles[$current_page] : 'VoltGaz';
+                    echo isset($page_titles[$current_page]) ? $page_titles[$current_page] : 'Gaztronik';
                     ?>
                 </span>
                 <div class="title-underline"></div>
@@ -133,18 +133,12 @@ $service_color = ($service_type == 'gas') ? '#ff6b35' : '#4dabf7';
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a href="profile.php" class="dropdown-item">
+                        <a href="dashboard.php" class="dropdown-item">
                             <i class="fas fa-user-circle"></i>
                             <span>Profil</span>
                         </a>
-                        <a href="settings.php" class="dropdown-item">
-                            <i class="fas fa-cog"></i>
-                            <span>Paramètres</span>
-                        </a>
-                        <a href="help.php" class="dropdown-item">
-                            <i class="fas fa-question-circle"></i>
-                            <span>Aide et support</span>
-                        </a>
+                        
+                        
                         <div class="dropdown-divider"></div>
                         <a href="logout.php" class="dropdown-item logout">
                             <i class="fas fa-sign-out-alt"></i>

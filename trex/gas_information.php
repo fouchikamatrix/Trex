@@ -323,19 +323,19 @@ $content = '
             <ul class="info-list">
                 <li>
                     <span class="info-label">Ligne d\'urgence</span>
-                    <span class="info-value">+1 (555) 911-GAZ</span>
+                    <span class="info-value">+1 (555) 197</span>
                 </li>
                 <li>
                     <span class="info-label">Service client</span>
-                    <span class="info-value">+1 (555) 123-4567</span>
+                    <span class="info-value">+1 (555) 92-654-654</span>
                 </li>
                 <li>
                     <span class="info-label">Support technique</span>
-                    <span class="info-value">+1 (555) 789-0123</span>
+                    <span class="info-value">+1 (555) 97-651-325</span>
                 </li>
                 <li>
                     <span class="info-label">Support par email</span>
-                    <span class="info-value">gas@voltgaz.com</span>
+                    <span class="info-value">gas@Gaztronik.com</span>
                 </li>
                 <li>
                     <span class="info-label">Heures de service</span>
@@ -382,11 +382,11 @@ $content = '
                 </li>
                 <li>
                     <span class="info-label">Tarif actuel</span>
-                    <span class="info-value">0,85 $ par m³</span>
+                    <span class="info-value">0,85 TND par m³</span>
                 </li>
                 <li>
                     <span class="info-label">Moyenne mensuelle</span>
-                    <span class="info-value">127,50 $</span>
+                    <span class="info-value">127,50 TND</span>
                 </li>
             </ul>
         </div>

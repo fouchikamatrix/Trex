@@ -107,7 +107,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Gestion factures gaz</title>
+    <title>GazTronik - Gestion factures gaz</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -558,12 +558,12 @@ try {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="rate">Tarif (€/unité)</label>
+                        <label for="rate">Tarif (TND/unité)</label>
                         <input type="number" id="rate" name="rate" step="0.001" 
                                placeholder="Ex: 0.85" value="0.85">
                     </div>
                     <div class="form-group">
-                        <label for="amount">Montant total (€) *</label>
+                        <label for="amount">Montant total (TND) *</label>
                         <input type="number" id="amount" name="amount" step="0.01" required 
                                placeholder="Ex: 127.50">
                         <button type="button" class="calculate-btn" onclick="calculateAmount()">
@@ -630,11 +630,11 @@ try {
                                 <div class="detail-label"><?php echo $bill['unit']; ?></div>
                             </div>
                             <div class="detail-item">
-                                <div class="detail-value"><?php echo number_format($bill['rate'], 3); ?>€</div>
+                                <div class="detail-value"><?php echo number_format($bill['rate'], 3); ?>TND</div>
                                 <div class="detail-label">Tarif</div>
                             </div>
                             <div class="detail-item">
-                                <div class="detail-value"><?php echo number_format($bill['amount'], 2); ?>€</div>
+                                <div class="detail-value"><?php echo number_format($bill['amount'], 2); ?>TND</div>
                                 <div class="detail-label">Montant</div>
                             </div>
                             <div class="detail-item">

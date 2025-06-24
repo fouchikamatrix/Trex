@@ -1,5 +1,5 @@
 <?php
-$page_title = "Contact électricité";
+$page_title = "Contact gaz";
 session_start();
 require_once 'config.php';
 
@@ -51,15 +51,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_POST = [];
         } catch (PDOException $e) {
             $error_message = 'Désolé, une erreur s\'est produite lors du traitement de votre demande. Veuillez réessayer.';
-            error_log("Electricity contact form error: " . $e->getMessage());
+            error_log("Gas contact form error: " . $e->getMessage());
         }
     }
 }
 
-// Set additional CSS for electricity contact page styling
+// Set additional CSS for gas contact page styling
 $additional_css = '
     body {
-        background: linear-gradient(135deg, #4dabf7 0%, #2196f3 100%);
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     }
 
     .contact-container {
@@ -91,9 +91,9 @@ $additional_css = '
         width: 100%;
         height: 100%;
         background: linear-gradient(45deg, 
-            rgba(77, 171, 247, 0.1) 0%, 
-            rgba(33, 150, 243, 0.1) 50%,
-            rgba(77, 171, 247, 0.1) 100%);
+            rgba(255, 107, 53, 0.1) 0%, 
+            rgba(247, 147, 30, 0.1) 50%,
+            rgba(255, 107, 53, 0.1) 100%);
         background-size: 400% 400%;
         animation: gradientShift 10s ease infinite;
         z-index: -1;
@@ -114,7 +114,7 @@ $additional_css = '
     }
 
     .contact-icon {
-        background: linear-gradient(135deg, #4dabf7 0%, #2196f3 100%);
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -150,17 +150,17 @@ $additional_css = '
     }
 
     .user-info {
-        background: rgba(77, 171, 247, 0.1);
+        background: rgba(255, 107, 53, 0.1);
         backdrop-filter: blur(10px);
         padding: 20px;
         border-radius: 15px;
         margin-bottom: 30px;
-        border: 1px solid rgba(77, 171, 247, 0.3);
+        border: 1px solid rgba(255, 107, 53, 0.3);
         position: relative;
     }
 
     .user-info::before {
-        background: linear-gradient(135deg, #4dabf7 0%, #2196f3 100%);
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         content: "";
         position: absolute;
         top: 0;
@@ -208,7 +208,7 @@ $additional_css = '
     }
 
     .form-group label i {
-        color: rgba(77, 171, 247, 0.8);
+        color: rgba(255, 107, 53, 0.8);
         margin-right: 8px;
     }
 
@@ -240,8 +240,8 @@ $additional_css = '
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-        border-color: rgba(77, 171, 247, 0.6);
-        box-shadow: 0 0 0 4px rgba(77, 171, 247, 0.1);
+        border-color: rgba(255, 107, 53, 0.6);
+        box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
         outline: none;
         background: rgba(255, 255, 255, 0.15);
         transform: translateY(-2px);
@@ -293,11 +293,11 @@ $additional_css = '
     }
 
     .priority-option input[type="radio"]:checked + .priority-label {
-        background: rgba(77, 171, 247, 0.2);
-        border-color: rgba(77, 171, 247, 0.6);
+        background: rgba(255, 107, 53, 0.2);
+        border-color: rgba(255, 107, 53, 0.6);
         color: #1a1a1a;
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(77, 171, 247, 0.2);
+        box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
     }
 
     .priority-label:hover {
@@ -310,7 +310,7 @@ $additional_css = '
     }
 
     .priority-label.normal {
-        border-color: rgba(77, 171, 247, 0.3);
+        border-color: rgba(255, 107, 53, 0.3);
     }
 
     .priority-label.high {
@@ -328,7 +328,7 @@ $additional_css = '
     }
 
     .submit-btn {
-        background: linear-gradient(135deg, #4dabf7 0%, #2196f3 100%);
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         width: 100%;
         padding: 20px;
         color: white;
@@ -362,7 +362,7 @@ $additional_css = '
     }
 
     .submit-btn:hover {
-        box-shadow: 0 15px 35px rgba(77, 171, 247, 0.4);
+        box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
         transform: translateY(-3px);
     }
 
@@ -456,7 +456,7 @@ $additional_css = '
     }
 
     .info-card-icon {
-        background: linear-gradient(135deg, #4dabf7 0%, #2196f3 100%);
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -571,10 +571,10 @@ $content = '
 <div class="contact-container">
     <div class="contact-header">
         <div class="contact-icon">
-            <i class="fas fa-bolt"></i>
+            <i class="fas fa-fire"></i>
         </div>
-        <h1>Support électricité</h1>
-        <p>Contactez notre équipe de support électricité</p>
+        <h1>Support gaz</h1>
+        <p>Contactez notre équipe de support gaz</p>
     </div>
 
     ' . (!empty($success_message) ? '<div class="alert success"><i class="fas fa-check-circle"></i>' . htmlspecialchars($success_message) . '</div>' : '') . '
@@ -597,11 +597,11 @@ $content = '
                     <select id="category" name="category" required>
                         <option value="">Sélectionner une catégorie</option>
                         <option value="billing" ' . (($_POST['category'] ?? '') === 'billing' ? 'selected' : '') . '>Problèmes de facturation</option>
-                        <option value="outage" ' . (($_POST['category'] ?? '') === 'outage' ? 'selected' : '') . '>Panne électrique</option>
+                        <option value="leak" ' . (($_POST['category'] ?? '') === 'leak' ? 'selected' : '') . '>Fuite de gaz</option>
                         <option value="meter" ' . (($_POST['category'] ?? '') === 'meter' ? 'selected' : '') . '>Lecture de compteur</option>
                         <option value="connection" ' . (($_POST['category'] ?? '') === 'connection' ? 'selected' : '') . '>Nouvelle connexion</option>
-                        <option value="voltage" ' . (($_POST['category'] ?? '') === 'voltage' ? 'selected' : '') . '>Problème de tension</option>
-                        <option value="safety" ' . (($_POST['category'] ?? '') === 'safety' ? 'selected' : '') . '>Sécurité électrique</option>
+                        <option value="pressure" ' . (($_POST['category'] ?? '') === 'pressure' ? 'selected' : '') . '>Problème de pression</option>
+                        <option value="safety" ' . (($_POST['category'] ?? '') === 'safety' ? 'selected' : '') . '>Sécurité gaz</option>
                         <option value="maintenance" ' . (($_POST['category'] ?? '') === 'maintenance' ? 'selected' : '') . '>Maintenance</option>
                         <option value="complaint" ' . (($_POST['category'] ?? '') === 'complaint' ? 'selected' : '') . '>Réclamation</option>
                         <option value="general" ' . (($_POST['category'] ?? '') === 'general' ? 'selected' : '') . '>Demande générale</option>
@@ -656,7 +656,7 @@ $content = '
                     Message
                 </label>
                 <textarea id="message" name="message" required 
-                          placeholder="Veuillez fournir des informations détaillées sur votre demande ou problème lié à l\'électricité..."
+                          placeholder="Veuillez fournir des informations détaillées sur votre demande ou problème lié au gaz..."
                           minlength="10" maxlength="1000">' . htmlspecialchars($_POST['message'] ?? '') . '</textarea>
                 <small style="color: #404040; font-size: 0.85rem; margin-top: 5px; display: block;">
                     <span id="charCount">0</span>/1000 caractères
@@ -675,8 +675,8 @@ $content = '
             <div class="info-card-icon">
                 <i class="fas fa-phone"></i>
             </div>
-            <h3>Urgence électricité</h3>
-            <p>Ligne d\'urgence 24/7<br><strong>+1 (555) 911-ELEC</strong></p>
+            <h3>Urgence gaz</h3>
+            <p>Ligne d\'urgence 24/7<br><strong>+1 (555) 911-GAS1</strong></p>
         </div>
 
         <div class="info-card">
@@ -684,7 +684,7 @@ $content = '
                 <i class="fas fa-envelope"></i>
             </div>
             <h3>Support par email</h3>
-            <p>Service électricité<br><strong>electricite@Gaztronik.com</strong></p>
+            <p>Service gaz<br><strong>gaz@Gaztronik.com</strong></p>
         </div>
 
         <div class="info-card">

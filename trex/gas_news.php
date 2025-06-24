@@ -169,6 +169,28 @@ $additional_css = '
         line-height: 1.3;
     }
 
+    .news-image {
+        margin-bottom: 20px;
+        text-align: center;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .news-image img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-radius: 15px;
+    }
+
+    .news-image:hover img {
+        transform: scale(1.02);
+    }
+
     .news-content {
         color: #2d2d2d;
         line-height: 1.6;
@@ -179,6 +201,13 @@ $additional_css = '
         color: #404040;
         font-size: 0.85rem;
         font-style: italic;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .news-author i {
+        color: #ff6b35;
     }
 
     .priority-high {
@@ -205,6 +234,27 @@ $additional_css = '
         opacity: 0.5;
     }
 
+    .news-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .news-service-type {
+        background: rgba(255, 107, 53, 0.2);
+        color: #ff6b35;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
     @media (max-width: 768px) {
         .news-container {
             padding: 0 15px;
@@ -214,6 +264,16 @@ $additional_css = '
             flex-direction: column;
             align-items: flex-start;
         }
+
+        .news-image img {
+            max-height: 200px;
+        }
+
+        .news-footer {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
     }
 ';
 
@@ -221,7 +281,7 @@ $content = '
 <div class="news-container">
     <div class="news-header">
         <div class="news-icon">
-            <i class="fas fa-newspaper"></i>
+            <i class="fas fa-fire"></i>
         </div>
         <h1>Actualités du service gaz</h1>
         <p>Restez informé des dernières annonces et mises à jour du service gaz</p>
@@ -245,6 +305,20 @@ if (!empty($news)) {
         
         $categoryText = $categoryTranslations[$article['category']] ?? ucfirst($article['category']);
         
+        // Service type display
+        $serviceTypeText = '';
+        switch($article['service_type']) {
+            case 'gas':
+                $serviceTypeText = 'Gaz';
+                break;
+            case 'electricity':
+                $serviceTypeText = 'Électricité';
+                break;
+            case 'both':
+                $serviceTypeText = 'Gaz & Électricité';
+                break;
+        }
+        
         $content .= '
         <div class="news-card ' . $priorityClass . '">
             <div class="news-meta">
@@ -252,17 +326,29 @@ if (!empty($news)) {
                 <div class="news-date">' . date('d M Y', strtotime($article['published_at'])) . '</div>
             </div>
             
-            <h2 class="news-title">' . htmlspecialchars($article['title']) . '</h2>
+            <h2 class="news-title">' . htmlspecialchars($article['title']) . '</h2>';
             
+        // Display image if exists
+        if (!empty($article['image_url']) && file_exists($article['image_url'])) {
+            $content .= '
+            <div class="news-image">
+                <img src="' . htmlspecialchars($article['image_url']) . '" alt="' . htmlspecialchars($article['title']) . '" loading="lazy">
+            </div>';
+        }
+        
+        $content .= '
             <div class="news-content">' . nl2br(htmlspecialchars($article['content'])) . '</div>
             
-            ' . (!empty($article['author']) ? '<div class="news-author">Par ' . htmlspecialchars($article['author']) . '</div>' : '') . '
+            <div class="news-footer">
+                <div class="news-service-type">' . $serviceTypeText . '</div>
+                ' . (!empty($article['author']) ? '<div class="news-author"><i class="fas fa-user"></i> Par ' . htmlspecialchars($article['author']) . '</div>' : '') . '
+            </div>
         </div>';
     }
 } else {
     $content .= '
     <div class="no-news">
-        <i class="fas fa-newspaper"></i>
+        <i class="fas fa-fire"></i>
         <h3>Aucune actualité disponible</h3>
         <p>Il n\'y a actuellement aucune actualité ou annonce du service gaz. Revenez plus tard pour les mises à jour.</p>
     </div>';

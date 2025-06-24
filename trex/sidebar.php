@@ -11,22 +11,24 @@ if (isset($_GET['switch_service']) && in_array($_GET['switch_service'], ['gas', 
 // Define menu items for each service type
 $menu_items = [
     'gas' => [
+        'dashboard' => ['url' => 'dashboard.php', 'icon' => 'fas fa-tachometer-alt', 'title' => 'Tableau de bord'],
         'bill' => ['url' => 'gas_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Facture gaz'],
         'news' => ['url' => 'gas_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Actualités gaz'],
         'information' => ['url' => 'gas_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Informations gaz'],
         'bill_payment' => ['url' => 'gas_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Paiement gaz'],
         'contact' => ['url' => 'gas_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Contact gaz'],
         'history' => ['url' => 'gas_history.php', 'icon' => 'fas fa-history', 'title' => 'Historique gaz'],
-        'reclamation' => ['url' => 'gas_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation gaz']
+        'reclamation' => ['url' => 'reclamations.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation gaz']
     ],
     'electricity' => [
+        'dashboard' => ['url' => 'dashboard.php', 'icon' => 'fas fa-tachometer-alt', 'title' => 'Tableau de bord'],
         'bill' => ['url' => 'electricity_bill.php', 'icon' => 'fas fa-file-invoice-dollar', 'title' => 'Facture électricité'],
         'news' => ['url' => 'electricity_news.php', 'icon' => 'fas fa-newspaper', 'title' => 'Actualités électricité'],
         'information' => ['url' => 'electricity_information.php', 'icon' => 'fas fa-info-circle', 'title' => 'Informations électricité'],
         'bill_payment' => ['url' => 'electricity_payment.php', 'icon' => 'fas fa-credit-card', 'title' => 'Paiement électricité'],
         'contact' => ['url' => 'electricity_contact.php', 'icon' => 'fas fa-phone', 'title' => 'Contact électricité'],
         'history' => ['url' => 'electricity_history.php', 'icon' => 'fas fa-history', 'title' => 'Historique électricité'],
-        'reclamation' => ['url' => 'electricity_reclamation.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation électricité']
+        'reclamation' => ['url' => 'reclamations.php', 'icon' => 'fas fa-exclamation-triangle', 'title' => 'Réclamation électricité']
     ]
 ];
 
@@ -35,6 +37,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // French translations for menu items
 $menu_translations = [
+    'dashboard' => 'Tableau de bord',
     'bill' => 'Facture',
     'news' => 'Actualités',
     'information' => 'Informations',
@@ -57,7 +60,7 @@ $menu_translations = [
                 <div class="logo-pulse"></div>
             </div>
             <h2 class="app-name">
-                <span class="volt">Volt</span><span class="gaz">Gaz</span>
+                <span class="volt">Gaz</span><span class="gaz">Tronik</span>
             </h2>
         </div>
     </div>
@@ -92,7 +95,7 @@ $menu_translations = [
             <?php foreach ($current_menu as $key => $item): ?>
                 <li class="nav-item">
                     <a href="<?php echo $item['url']; ?>" 
-                       class="nav-link <?php echo (strpos($current_page, $key) !== false || $current_page == $item['url']) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo (strpos($current_page, $key) !== false || $current_page == $item['url'] || ($key == 'dashboard' && $current_page == 'user_dashboard.php')) ? 'active' : ''; ?>">
                         <div class="nav-icon-wrapper">
                             <i class="<?php echo $item['icon']; ?>"></i>
                             <div class="nav-icon-bg"></div>

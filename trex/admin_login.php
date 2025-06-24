@@ -5,7 +5,7 @@ require_once 'config.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
+    $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     
     if (empty($username) || empty($password)) {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Nom d\'utilisateur ou mot de passe invalide.';
             }
         } catch (PDOException $e) {
-            $error = 'Erreur de base de données.';
+            $error = 'Erreur de base de données: ' . $e->getMessage();
         }
     }
 }
@@ -43,7 +43,7 @@ if (isset($_SESSION['admin_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Administration</title>
+    <title>GazTronik - Administration</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -312,7 +312,7 @@ if (isset($_SESSION['admin_id'])) {
         <div class="admin-header">
             <i class="fas fa-shield-alt admin-icon"></i>
             <h1>Administration</h1>
-            <p>Panneau d'administration VoltGaz</p>
+            <p>Panneau d'administration GazTronik</p>
         </div>
 
         <?php if (!empty($error)): ?>

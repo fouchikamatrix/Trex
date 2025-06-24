@@ -10,36 +10,58 @@ if (!isset($_SESSION['admin_id'])) {
 
 $admin_username = $_SESSION['admin_username'] ?? 'Admin';
 
-// Get statistics
+// Get statistics with better error handling
+$total_users = 0;
+$total_news = 0;
+$total_bills = 0;
+$pending_bills = 0;
+$recent_activities = [];
+
 try {
     // Count total users
     $stmt = $pdo->query("SELECT COUNT(*) as total_users FROM users");
-    $total_users = $stmt->fetch(PDO::FETCH_ASSOC)['total_users'];
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_users = $result['total_users'] ?? 0;
     
     // Count total news
     $stmt = $pdo->query("SELECT COUNT(*) as total_news FROM news");
-    $total_news = $stmt->fetch(PDO::FETCH_ASSOC)['total_news'];
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_news = $result['total_news'] ?? 0;
     
     // Count total bills
     $stmt = $pdo->query("SELECT COUNT(*) as total_bills FROM bills");
-    $total_bills = $stmt->fetch(PDO::FETCH_ASSOC)['total_bills'];
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_bills = $result['total_bills'] ?? 0;
     
     // Count pending bills
     $stmt = $pdo->query("SELECT COUNT(*) as pending_bills FROM bills WHERE status = 'pending'");
-    $pending_bills = $stmt->fetch(PDO::FETCH_ASSOC)['pending_bills'];
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $pending_bills = $result['pending_bills'] ?? 0;
+
+    // Count total contact messages
+    $stmt = $pdo->query("SELECT COUNT(*) as total_messages FROM contact_messages");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_messages = $result['total_messages'] ?? 0;
+
+    // Count pending contact messages
+    $stmt = $pdo->query("SELECT COUNT(*) as pending_messages FROM contact_messages WHERE status = 'pending'");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $pending_messages = $result['pending_messages'] ?? 0;
     
     // Recent activities
     $stmt = $pdo->query("
         SELECT 'news' as type, title as description, created_at as date FROM news 
+        WHERE created_at IS NOT NULL
         UNION ALL 
         SELECT 'bill' as type, CONCAT('Facture #', bill_number, ' - ', amount, '€') as description, created_at as date FROM bills 
+        WHERE created_at IS NOT NULL
         ORDER BY date DESC LIMIT 10
     ");
     $recent_activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (PDOException $e) {
-    $total_users = $total_news = $total_bills = $pending_bills = 0;
-    $recent_activities = [];
+    error_log("Database error in admin dashboard: " . $e->getMessage());
+    // Keep default values
 }
 ?>
 
@@ -48,7 +70,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Tableau de bord Admin</title>
+    <title>Gaztronik - Tableau de bord Admin</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -424,6 +446,16 @@ try {
             <div class="stat-value"><?php echo number_format($pending_bills); ?></div>
             <div class="stat-label">Factures en attente</div>
         </div>
+
+        <div class="stat-card warning">
+            <div class="stat-header">
+                <div class="stat-icon" style="color: #8b5cf6;">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <div class="stat-value"><?php echo number_format($pending_messages); ?></div>
+            <div class="stat-label">Messages en attente</div>
+        </div>
     </div>
 
     <div class="management-grid">
@@ -472,6 +504,22 @@ try {
             <a href="admin_electricity_bills.php" class="management-btn">
                 <i class="fas fa-plus-circle"></i>
                 Gérer factures électricité
+            </a>
+        </div>
+
+        <div class="management-card">
+            <div class="management-header">
+                <div class="management-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="management-title">Messages de contact</div>
+            </div>
+            <div class="management-description">
+                Gérez les messages de contact des utilisateurs pour les services gaz et électricité. Répondez aux demandes et suivez leur statut.
+            </div>
+            <a href="admin_contact_messages.php" class="management-btn">
+                <i class="fas fa-envelope-open"></i>
+                Gérer les messages
             </a>
         </div>
     </div>

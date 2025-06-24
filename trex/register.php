@@ -79,7 +79,7 @@ if (isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltGaz - Créer un compte</title>
+    <title>Gaztronik - Créer un compte</title>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -560,7 +560,7 @@ if (isset($_SESSION['user_id'])) {
                 <i class="fas fa-bolt logo-icon"></i>
                 <div class="logo-pulse"></div>
             </div>
-            <h1><span class="volt">Volt</span><span class="gaz">Gaz</span></h1>
+            <h1><span class="volt">Gaz</span><span class="gaz">Tronik</span></h1>
             <p>Créez votre compte</p>
         </div>
 
@@ -737,7 +737,7 @@ if (isset($_SESSION['user_id'])) {
 
             <button type="submit" class="btn" id="registerBtn">
                 <i class="fas fa-user-plus"></i>
-                Créer un compte VoltGaz
+                Créer un compte Gaztronik
             </button>
         </form>
 

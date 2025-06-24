@@ -512,18 +512,7 @@ $content = '
         </div>
 
         <!-- Recent Activity Card -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">📋</div>
-                <div class="card-title">Activité récente</div>
-            </div>
-            <div class="card-content">
-                <div class="coming-soon">
-                    <h3>Journal d\'activité bientôt disponible</h3>
-                    <p>Suivez vos transactions récentes, paiements de factures et demandes de service.</p>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>';
 

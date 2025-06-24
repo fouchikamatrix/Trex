@@ -392,7 +392,7 @@ if (!empty($pending_bills)) {
                                 <h4>Facture #' . htmlspecialchars($bill['bill_number']) . '</h4>
                                 <p>Échéance : ' . date('d M Y', strtotime($bill['due_date'])) . ' | ' . $bill['consumption'] . ' ' . $bill['unit'] . '</p>
                             </div>
-                            <div class="bill-amount">' . number_format($bill['amount'], 2) . ' $</div>
+                            <div class="bill-amount">' . number_format($bill['amount'], 2) . ' TND</div>
                         </div>
                     </div>';
     }
@@ -403,7 +403,7 @@ if (!empty($pending_bills)) {
 
             <div class="form-group">
                 <label>
-                    <i class="fas fa-dollar-sign"></i>
+                    (TND)
                     Montant du paiement
                 </label>
                 <input type="number" name="amount" id="paymentAmount" step="0.01" readonly required>

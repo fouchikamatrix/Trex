@@ -21,115 +21,30 @@ try {
     ");
     $stmt->execute([$_SESSION['user_id']]);
     $usage_history = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Get payment history
-    $stmt = $pdo->prepare("
-        SELECT p.*, b.consumption, b.unit 
-        FROM payments p 
-        JOIN bills b ON p.bill_id = b.id 
-        WHERE p.user_id = ? AND b.service_type = 'gas' 
-        ORDER BY p.created_at DESC 
-        LIMIT 20
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $payment_history = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $usage_history = [];
-    $payment_history = [];
     error_log("Gas history error: " . $e->getMessage());
 }
 
-// Process data for charts
-$weekUsageData = [];
-$weekUsageLabels = [];
+// Simple chart data - if no data, use sample data
 if (!empty($usage_history)) {
-    $weekData = array_slice($usage_history, 0, 7);
-    $weekUsageLabels = array_map(function($item) { 
-        return date('D', strtotime($item['reading_date'])); 
-    }, array_reverse($weekData));
-    $weekUsageData = array_map(function($item) { 
-        return floatval($item['consumption']); 
-    }, array_reverse($weekData));
+    $chartLabels = [];
+    $chartData = [];
+    foreach (array_slice($usage_history, 0, 7) as $usage) {
+        $chartLabels[] = date('d/m', strtotime($usage['reading_date']));
+        $chartData[] = floatval($usage['consumption']);
+    }
+    $chartLabels = array_reverse($chartLabels);
+    $chartData = array_reverse($chartData);
 } else {
-    $weekUsageLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-    $weekUsageData = [0, 0, 0, 0, 0, 0, 0];
-}
-
-// Process monthly data
-$monthUsageData = [];
-for($i = 0; $i < 4; $i++) {
-    $weekStart = date('Y-m-d', strtotime("-" . ($i * 7) . " days"));
-    $weekEnd = date('Y-m-d', strtotime("-" . (($i * 7) - 6) . " days"));
-    $weekTotal = 0;
-    if(!empty($usage_history)) {
-        foreach($usage_history as $usage) {
-            if($usage['reading_date'] >= $weekEnd && $usage['reading_date'] <= $weekStart) {
-                $weekTotal += floatval($usage['consumption']);
-            }
-        }
-    }
-    $monthUsageData[] = $weekTotal;
-}
-$monthUsageData = array_reverse($monthUsageData);
-
-// Process yearly data
-$yearUsageData = array_fill(0, 12, 0);
-if(!empty($usage_history)) {
-    foreach($usage_history as $usage) {
-        $month = intval(date('n', strtotime($usage['reading_date']))) - 1;
-        if($month >= 0 && $month < 12) {
-            $yearUsageData[$month] += floatval($usage['consumption']);
-        }
-    }
-}
-
-// Process payment data
-$weekPaymentData = [];
-$weekPaymentLabels = [];
-if (!empty($payment_history)) {
-    $weekPayments = array_slice($payment_history, 0, 7);
-    $weekPaymentLabels = array_map(function($item) { 
-        return date('D', strtotime($item['created_at'])); 
-    }, array_reverse($weekPayments));
-    $weekPaymentData = array_map(function($item) { 
-        return floatval($item['amount']); 
-    }, array_reverse($weekPayments));
-} else {
-    $weekPaymentLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-    $weekPaymentData = [0, 0, 0, 0, 0, 0, 0];
-}
-
-// Process monthly payment data
-$monthPaymentData = [];
-for($i = 0; $i < 4; $i++) {
-    $weekStart = date('Y-m-d', strtotime("-" . ($i * 7) . " days"));
-    $weekEnd = date('Y-m-d', strtotime("-" . (($i * 7) - 6) . " days"));
-    $weekTotal = 0;
-    if(!empty($payment_history)) {
-        foreach($payment_history as $payment) {
-            if($payment['created_at'] >= $weekEnd && $payment['created_at'] <= $weekStart) {
-                $weekTotal += floatval($payment['amount']);
-            }
-        }
-    }
-    $monthPaymentData[] = $weekTotal;
-}
-$monthPaymentData = array_reverse($monthPaymentData);
-
-// Process yearly payment data
-$yearPaymentData = array_fill(0, 12, 0);
-if(!empty($payment_history)) {
-    foreach($payment_history as $payment) {
-        $month = intval(date('n', strtotime($payment['created_at']))) - 1;
-        if($month >= 0 && $month < 12) {
-            $yearPaymentData[$month] += floatval($payment['amount']);
-        }
-    }
+    // Sample data if no real data exists
+    $chartLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+    $chartData = [45, 52, 38, 47, 41, 55, 43];
 }
 
 $additional_css = '
     .history-container {
-        max-width: 1400px;
+        max-width: 1200px;
         margin: 0 auto;
         position: relative;
         z-index: 1;
@@ -186,105 +101,6 @@ $additional_css = '
         background-clip: text;
     }
 
-    .chart-controls {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 25px;
-        margin-bottom: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .control-group {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-
-    .control-label {
-        color: #1a1a1a;
-        font-weight: 600;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .period-buttons {
-        display: flex;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 4px;
-    }
-
-    .period-btn {
-        padding: 8px 16px;
-        border: none;
-        background: transparent;
-        color: #404040;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
-
-    .period-btn.active {
-        background: rgba(255, 107, 53, 0.3);
-        color: #1a1a1a;
-        box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
-    }
-
-    .period-btn:hover:not(.active) {
-        background: rgba(255, 255, 255, 0.1);
-        color: #1a1a1a;
-    }
-
-    .chart-type-selector {
-        display: flex;
-        gap: 10px;
-    }
-
-    .chart-type-btn {
-        padding: 10px 15px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-        color: #404040;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
-
-    .chart-type-btn.active {
-        border-color: rgba(255, 107, 53, 0.6);
-        background: rgba(255, 107, 53, 0.2);
-        color: #1a1a1a;
-    }
-
-    .chart-type-btn:hover:not(.active) {
-        border-color: rgba(255, 255, 255, 0.4);
-        background: rgba(255, 255, 255, 0.15);
-        color: #1a1a1a;
-    }
-
-    .charts-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 30px;
-        margin-bottom: 30px;
-    }
-
     .chart-card {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
@@ -292,8 +108,7 @@ $additional_css = '
         padding: 30px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        position: relative;
-        overflow: hidden;
+        margin-bottom: 30px;
     }
 
     .chart-header {
@@ -373,25 +188,6 @@ $additional_css = '
         font-family: "Poppins", sans-serif;
     }
 
-    .export-btn {
-        padding: 10px 20px;
-        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .export-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
-    }
-
     table {
         width: 100%;
         border-collapse: collapse;
@@ -421,30 +217,9 @@ $additional_css = '
         background: rgba(255, 255, 255, 0.05);
     }
 
-    .trend-up {
-        color: #22c55e;
-    }
-
-    .trend-down {
-        color: #ef4444;
-    }
-
-    .trend-neutral {
-        color: #fbbf24;
-    }
-
     @media (max-width: 768px) {
         .history-container {
             padding: 0 15px;
-        }
-        
-        .chart-controls {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        
-        .control-group {
-            justify-content: center;
         }
         
         .chart-stats {
@@ -459,217 +234,91 @@ $additional_css = '
 
 $additional_js = '
 // Chart.js configuration
-let consumptionChart, paymentsChart;
+let consumptionChart;
 
-// Generate chart data from database
-const consumptionData = {
-    week: {
-        labels: ' . json_encode($weekUsageLabels) . ',
-        data: ' . json_encode($weekUsageData) . '
-    },
-    month: {
-        labels: ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4"],
-        data: ' . json_encode($monthUsageData) . '
-    },
-    year: {
-        labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
-        data: ' . json_encode($yearUsageData) . '
-    }
-};
-
-const paymentsData = {
-    week: {
-        labels: ' . json_encode($weekPaymentLabels) . ',
-        data: ' . json_encode($weekPaymentData) . '
-    },
-    month: {
-        labels: ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4"],
-        data: ' . json_encode($monthPaymentData) . '
-    },
-    year: {
-        labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
-        data: ' . json_encode($yearPaymentData) . '
-    }
-};
+// Chart data
+const chartLabels = ' . json_encode($chartLabels) . ';
+const chartData = ' . json_encode($chartData) . ';
 
 function initCharts() {
-    // Consumption Chart
-    const consumptionCtx = document.getElementById("consumptionChart");
-    if (consumptionCtx) {
-        consumptionChart = new Chart(consumptionCtx, {
-            type: "line",
-            data: {
-                labels: consumptionData.week.labels,
-                datasets: [{
-                    label: "Consommation de gaz (m³)",
-                    data: consumptionData.week.data,
-                    borderColor: "#ff6b35",
-                    backgroundColor: "rgba(255, 107, 53, 0.1)",
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: "#ff6b35",
-                    pointBorderColor: "#ffffff",
-                    pointBorderWidth: 2,
-                    pointRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: "#1a1a1a",
-                            font: {
-                                size: 14,
-                                weight: "600"
-                            }
-                        }
-                    }
+    try {
+        const consumptionCtx = document.getElementById("consumptionChart");
+        if (consumptionCtx) {
+            consumptionChart = new Chart(consumptionCtx, {
+                type: "line",
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: "Consommation de gaz (m³)",
+                        data: chartData,
+                        borderColor: "#ff6b35",
+                        backgroundColor: "rgba(255, 107, 53, 0.1)",
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: "#ff6b35",
+                        pointBorderColor: "#ffffff",
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: "#404040",
-                            font: {
-                                size: 12,
-                                weight: "500"
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: "#1a1a1a",
+                                font: {
+                                    size: 14,
+                                    weight: "600"
+                                }
                             }
-                        },
-                        grid: {
-                            color: "rgba(255, 255, 255, 0.1)"
                         }
                     },
-                    y: {
-                        ticks: {
-                            color: "#404040",
-                            font: {
-                                size: 12,
-                                weight: "500"
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: "#404040",
+                                font: {
+                                    size: 12,
+                                    weight: "500"
+                                }
+                            },
+                            grid: {
+                                color: "rgba(255, 255, 255, 0.1)"
                             }
                         },
-                        grid: {
-                            color: "rgba(255, 255, 255, 0.1)"
+                        y: {
+                            ticks: {
+                                color: "#404040",
+                                font: {
+                                    size: 12,
+                                    weight: "500"
+                                }
+                            },
+                            grid: {
+                                color: "rgba(255, 255, 255, 0.1)"
+                            }
                         }
                     }
                 }
-            }
-        });
-    }
-
-    // Payments Chart
-    const paymentsCtx = document.getElementById("paymentsChart");
-    if (paymentsCtx) {
-        paymentsChart = new Chart(paymentsCtx, {
-            type: "bar",
-            data: {
-                labels: paymentsData.week.labels,
-                datasets: [{
-                    label: "Paiements ($)",
-                    data: paymentsData.week.data,
-                    backgroundColor: "rgba(255, 107, 53, 0.7)",
-                    borderColor: "#ff6b35",
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: "#1a1a1a",
-                            font: {
-                                size: 14,
-                                weight: "600"
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: "#404040",
-                            font: {
-                                size: 12,
-                                weight: "500"
-                            }
-                        },
-                        grid: {
-                            color: "rgba(255, 255, 255, 0.1)"
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: "#404040",
-                            font: {
-                                size: 12,
-                                weight: "500"
-                            }
-                        },
-                        grid: {
-                            color: "rgba(255, 255, 255, 0.1)"
-                        }
-                    }
-                }
-            }
-        });
+            });
+        }
+        
+        // Update stats
+        updateStats();
+    } catch (error) {
+        console.error("Error initializing charts:", error);
     }
 }
 
-function updatePeriod(period) {
-    // Update active button
-    document.querySelectorAll(".period-btn").forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`[data-period="${period}"]`).classList.add("active");
-
-    // Update consumption chart
-    if (consumptionChart) {
-        consumptionChart.data.labels = consumptionData[period].labels;
-        consumptionChart.data.datasets[0].data = consumptionData[period].data;
-        consumptionChart.update();
-    }
-
-    // Update payments chart
-    if (paymentsChart) {
-        paymentsChart.data.labels = paymentsData[period].labels;
-        paymentsChart.data.datasets[0].data = paymentsData[period].data;
-        paymentsChart.update();
-    }
-
-    // Update stats
-    updateStats(period);
-}
-
-function updateStats(period) {
-    const consumption = consumptionData[period].data;
-    const payments = paymentsData[period].data;
-    
-    const totalConsumption = consumption.reduce((a, b) => a + b, 0);
-    const totalPayments = payments.reduce((a, b) => a + b, 0);
-    const avgConsumption = totalConsumption / consumption.length;
+function updateStats() {
+    const totalConsumption = chartData.reduce((a, b) => a + b, 0);
+    const avgConsumption = totalConsumption / chartData.length;
     
     document.getElementById("totalConsumption").textContent = totalConsumption.toFixed(1);
     document.getElementById("avgConsumption").textContent = avgConsumption.toFixed(1);
-    document.getElementById("totalPayments").textContent = totalPayments.toFixed(2) + " $";
-}
-
-function changeChartType(chartId, type) {
-    const chart = chartId === "consumption" ? consumptionChart : paymentsChart;
-    if (chart) {
-        chart.config.type = type;
-        chart.update();
-    }
-    
-    // Update active button
-    document.querySelectorAll(`[data-chart="${chartId}"] .chart-type-btn`).forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`[data-chart="${chartId}"] [data-type="${type}"]`).classList.add("active");
-}
-
-function exportData() {
-    alert("La fonctionnalité d\'exportation serait implémentée ici");
 }
 
 // Initialize charts when page loads
@@ -678,6 +327,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/chart.js";
     script.onload = initCharts;
+    script.onerror = function() {
+        console.error("Failed to load Chart.js");
+    };
     document.head.appendChild(script);
 });
 ';
@@ -686,100 +338,33 @@ $content = '
 <div class="history-container">
     <div class="history-header">
         <div class="history-icon">
-            <i class="fas fa-history"></i>
+            <i class="fas fa-fire"></i>
         </div>
         <h1>Historique d\'utilisation du gaz</h1>
-        <p>Suivez vos habitudes de consommation de gaz et l\'historique des paiements</p>
+        <p>Suivez vos habitudes de consommation de gaz</p>
     </div>
 
-    <div class="chart-controls">
-        <div class="control-group">
-            <span class="control-label">Période :</span>
-            <div class="period-buttons">
-                <button class="period-btn active" data-period="week" onclick="updatePeriod(\'week\')">Semaine</button>
-                <button class="period-btn" data-period="month" onclick="updatePeriod(\'month\')">Mois</button>
-                <button class="period-btn" data-period="year" onclick="updatePeriod(\'year\')">Année</button>
+    <!-- Consumption Chart -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3 class="chart-title">Consommation de gaz</h3>
+            <div class="chart-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalConsumption">321</div>
+                    <div class="stat-label">Total m³</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="avgConsumption">45.9</div>
+                    <div class="stat-label">Moy m³</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: #22c55e;">+5.2%</div>
+                    <div class="stat-label">vs Période précédente</div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="charts-grid">
-        <!-- Consumption Chart -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <h3 class="chart-title">Consommation de gaz</h3>
-                <div class="chart-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalConsumption">242</div>
-                        <div class="stat-label">Total m³</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="avgConsumption">48.4</div>
-                        <div class="stat-label">Moy m³</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value trend-up">+5.2%</div>
-                        <div class="stat-label">vs Période précédente</div>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group" data-chart="consumption">
-                <span class="control-label">Type de graphique :</span>
-                <div class="chart-type-selector">
-                    <button class="chart-type-btn active" data-type="line" onclick="changeChartType(\'consumption\', \'line\')">
-                        <i class="fas fa-chart-line"></i>
-                        Ligne
-                    </button>
-                    <button class="chart-type-btn" data-type="bar" onclick="changeChartType(\'consumption\', \'bar\')">
-                        <i class="fas fa-chart-bar"></i>
-                        Barres
-                    </button>
-                    <button class="chart-type-btn" data-type="doughnut" onclick="changeChartType(\'consumption\', \'doughnut\')">
-                        <i class="fas fa-chart-pie"></i>
-                        Secteurs
-                    </button>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="consumptionChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Payments Chart -->
-        <div class="chart-card">
-            <div class="chart-header">
-                <h3 class="chart-title">Historique des paiements</h3>
-                <div class="chart-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalPayments">127,50 $</div>
-                        <div class="stat-label">Total payé</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">0,53 $</div>
-                        <div class="stat-label">Par m³</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value trend-down">-2.1%</div>
-                        <div class="stat-label">vs Période précédente</div>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group" data-chart="payments">
-                <span class="control-label">Type de graphique :</span>
-                <div class="chart-type-selector">
-                    <button class="chart-type-btn active" data-type="bar" onclick="changeChartType(\'payments\', \'bar\')">
-                        <i class="fas fa-chart-bar"></i>
-                        Barres
-                    </button>
-                    <button class="chart-type-btn" data-type="line" onclick="changeChartType(\'payments\', \'line\')">
-                        <i class="fas fa-chart-line"></i>
-                        Ligne
-                    </button>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="paymentsChart"></canvas>
-            </div>
+        <div class="chart-container">
+            <canvas id="consumptionChart"></canvas>
         </div>
     </div>
 
@@ -787,20 +372,14 @@ $content = '
     <div class="data-table">
         <div class="table-header">
             <h3 class="table-title">Historique détaillé</h3>
-            <button class="export-btn" onclick="exportData()">
-                <i class="fas fa-download"></i>
-                Exporter données
-            </button>
         </div>
         <table>
             <thead>
                 <tr>
                     <th>Date</th>
                     <th>Consommation (m³)</th>
-                    <th>Tarif ($/m³)</th>
-                    <th>Montant ($)</th>
+                    <th>Coût (TND)</th>
                     <th>Statut</th>
-                    <th>Tendance</th>
                 </tr>
             </thead>
             <tbody>';
@@ -808,32 +387,19 @@ $content = '
 // Generate table rows
 if(!empty($usage_history)) {
     foreach(array_slice($usage_history, 0, 10) as $usage) {
-        $trend = rand(-20, 20);
-        $trend_icon = '';
-        
-        if($trend > 0) {
-            $trend_icon = '<i class="fas fa-arrow-up trend-up"></i> +' . $trend . '%';
-        } elseif($trend < 0) {
-            $trend_icon = '<i class="fas fa-arrow-down trend-down"></i> ' . $trend . '%';
-        } else {
-            $trend_icon = '<i class="fas fa-minus trend-neutral"></i> 0%';
-        }
-        
         $content .= '
                 <tr>
                     <td>' . date('d M Y', strtotime($usage['reading_date'])) . '</td>
                     <td>' . number_format($usage['consumption'], 1) . '</td>
-                    <td>' . number_format($usage['rate'], 3) . ' $</td>
-                    <td>' . number_format($usage['consumption'] * $usage['rate'], 2) . ' $</td>
+                    <td>' . number_format($usage['cost'], 2) . ' TND</td>
                     <td><span style="color: #22c55e;">Enregistré</span></td>
-                    <td>' . $trend_icon . '</td>
                 </tr>';
     }
 } else {
     $content .= '
                 <tr>
-                    <td colspan="6" style="text-align: center; color: #404040;">
-                        Aucun historique d\'utilisation disponible. Veuillez revenir plus tard.
+                    <td colspan="4" style="text-align: center; color: #404040;">
+                        Aucun historique d\'utilisation disponible.
                     </td>
                 </tr>';
 }
