@@ -300,10 +300,7 @@ $content = '
                     <div class="stat-value">24/7</div>
                     <div class="stat-label">Support</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Années</div>
-                </div>
+                
                 <div class="stat-item">
                     <div class="stat-value">0</div>
                     <div class="stat-label">Problèmes</div>

@@ -270,10 +270,7 @@ $content = '
                     <div class="stat-value">24/7</div>
                     <div class="stat-label">Support</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Années</div>
-                </div>
+                
                 <div class="stat-item">
                     <div class="stat-value">1</div>
                     <div class="stat-label">Panne</div>

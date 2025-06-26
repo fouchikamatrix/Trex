@@ -503,10 +503,7 @@ $content = '
                         <div class="info-label">Date de la prochaine facture</div>
                         <div class="info-value">' . htmlspecialchars($user_data['next_bill_date'] ?? 'Non programmée') . '</div>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">Plan de service</div>
-                        <div class="info-value">' . htmlspecialchars($user_data['service_plan'] ?? 'Plan Standard') . '</div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

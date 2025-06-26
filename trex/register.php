@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
     $gas_counter = trim($_POST['gas_counter_number'] ?? '');
+    $gas_counter_type = $_POST['gas_counter_type'] ?? '';
     $electric_counter = trim($_POST['electric_counter_number'] ?? '');
     $counter_type = $_POST['electric_counter_type'] ?? '';
     $client_type = $_POST['client_type'] ?? '';
@@ -21,8 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validation
     if (empty($name) || empty($last_name) || empty($id_card) || empty($reference) || 
-        empty($email) || empty($phone) || empty($gas_counter) || empty($electric_counter) || 
-        empty($counter_type) || empty($client_type) || empty($password) || empty($confirm_password)) {
+        empty($email) || empty($phone) || empty($gas_counter) || empty($gas_counter_type) || 
+        empty($electric_counter) || empty($counter_type) || empty($client_type) || 
+        empty($password) || empty($confirm_password)) {
         $error = 'Veuillez remplir tous les champs.';
     } elseif ($password !== $confirm_password) {
         $error = 'Les mots de passe ne correspondent pas.';
@@ -43,14 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $stmt = $pdo->prepare("
                     INSERT INTO users (name, last_name, id_card_number, reference, email, phone, 
-                                     gas_counter_number, electric_counter_number, electric_counter_type, 
-                                     client_type, password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                     gas_counter_number, gas_counter_type, electric_counter_number, 
+                                     electric_counter_type, client_type, password) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
                 
                 $stmt->execute([
                     $name, $last_name, $id_card, $reference, $email, $phone,
-                    $gas_counter, $electric_counter, $counter_type, $client_type, $hashed_password
+                    $gas_counter, $gas_counter_type, $electric_counter, $counter_type, 
+                    $client_type, $hashed_password
                 ]);
                 
                 $success = 'Compte créé avec succès ! Redirection vers la connexion...';
@@ -503,6 +506,97 @@ if (isset($_SESSION['user_id'])) {
             background: rgba(255, 255, 255, 0.5);
         }
 
+        .form-group-stack {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group-stack .form-group {
+    margin-bottom: 0;
+}
+
+.form-row {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* Specific styling for meter section */
+.meter-section .form-row {
+    gap: 30px;
+}
+
+.meter-section .form-group-stack:first-child {
+    flex: 0.9;
+}
+
+.meter-section .form-group-stack:last-child {
+    flex: 1.1;
+}
+
+/* Ensure consistent field heights */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+    min-height: 85px;
+}
+
+.form-group label {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    height: 57px;
+}
+
+input, select {
+    width: 100%;
+    height: 57px;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: #1a1a1a;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-group-stack {
+        flex: 1;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .meter-section .form-group-stack:first-child,
+    .meter-section .form-group-stack:last-child {
+        flex: 1;
+    }
+    
+    .form-group {
+        min-height: auto;
+    }
+}
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .auth-container {
@@ -655,59 +749,74 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </div>
 
-            <div class="form-section">
-                <h3 class="section-title">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Informations des compteurs
-                </h3>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="gas_counter_number">Numéro compteur gaz</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-fire input-icon"></i>
-                            <input type="text" id="gas_counter_number" name="gas_counter_number" required 
-                                   placeholder="Entrez le numéro du compteur gaz"
-                                   value="<?php echo htmlspecialchars($_POST['gas_counter_number'] ?? ''); ?>">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="electric_counter_number">Numéro compteur électrique</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-bolt input-icon"></i>
-                            <input type="text" id="electric_counter_number" name="electric_counter_number" required 
-                                   placeholder="Entrez le numéro du compteur électrique"
-                                   value="<?php echo htmlspecialchars($_POST['electric_counter_number'] ?? ''); ?>">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="electric_counter_type">Type de compteur électrique</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-cog input-icon"></i>
-                            <select id="electric_counter_type" name="electric_counter_type" required>
-                                <option value="">Sélectionner le type de compteur</option>
-                                <option value="classic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'classic') ? 'selected' : ''; ?>>Classique</option>
-                                <option value="electronic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'electronic') ? 'selected' : ''; ?>>Électronique</option>
-                                <option value="linky" <?php echo (($_POST['electric_counter_type'] ?? '') === 'linky') ? 'selected' : ''; ?>>Linky</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="client_type">Type de client</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-building input-icon"></i>
-                            <select id="client_type" name="client_type" required>
-                                <option value="">Sélectionner le type de client</option>
-                                <option value="residentiel" <?php echo (($_POST['client_type'] ?? '') === 'residentiel') ? 'selected' : ''; ?>>Résidentiel</option>
-                                <option value="industriel" <?php echo (($_POST['client_type'] ?? '') === 'industriel') ? 'selected' : ''; ?>>Industriel</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="form-section meter-section">
+    <h3 class="section-title">
+        <i class="fas fa-tachometer-alt"></i>
+        Informations des compteurs
+    </h3>
+    
+    <div class="form-row">
+        <div class="form-group-stack">
+            <div class="form-group">
+                <label for="gas_counter_number">Numéro compteur gaz</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-fire input-icon"></i>
+                    <input type="text" id="gas_counter_number" name="gas_counter_number" required 
+                           placeholder="Entrez le numéro du compteur gaz"
+                           value="<?php echo htmlspecialchars($_POST['gas_counter_number'] ?? ''); ?>">
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label for="gas_counter_type">Type de compteur gaz</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-cog input-icon"></i>
+                    <select id="gas_counter_type" name="gas_counter_type" required>
+                        <option value="">Sélectionner le type de compteur</option>
+                        <option value="linky" <?php echo (($_POST['gas_counter_type'] ?? '') === 'linky') ? 'selected' : ''; ?>>Linky</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group-stack">
+            <div class="form-group">
+                <label for="electric_counter_number">Numéro compteur électrique</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-bolt input-icon"></i>
+                    <input type="text" id="electric_counter_number" name="electric_counter_number" required 
+                           placeholder="Entrez le numéro du compteur électrique"
+                           value="<?php echo htmlspecialchars($_POST['electric_counter_number'] ?? ''); ?>">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="client_type">Type de client</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-building input-icon"></i>
+                    <select id="client_type" name="client_type" required>
+                        <option value="">Sélectionner le type de client</option>
+                        <option value="residentiel" <?php echo (($_POST['client_type'] ?? '') === 'residentiel') ? 'selected' : ''; ?>>Résidentiel</option>
+                        <option value="industriel" <?php echo (($_POST['client_type'] ?? '') === 'industriel') ? 'selected' : ''; ?>>Industriel</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="electric_counter_type">Type de compteur électrique</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-cog input-icon"></i>
+                    <select id="electric_counter_type" name="electric_counter_type" required>
+                        <option value="">Sélectionner le type de compteur</option>
+                        <option value="classic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'classic') ? 'selected' : ''; ?>>Classique</option>
+                        <option value="electronic" <?php echo (($_POST['electric_counter_type'] ?? '') === 'electronic') ? 'selected' : ''; ?>>Électronique</option>
+                        <option value="linky" <?php echo (($_POST['electric_counter_type'] ?? '') === 'linky') ? 'selected' : ''; ?>>Linky</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div class="form-section">
                 <h3 class="section-title">
